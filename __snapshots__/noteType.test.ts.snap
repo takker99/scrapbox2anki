@@ -1,0 +1,46 @@
+export const snapshot = {};
+
+snapshot[`parseNoteType() 1`] = `
+{
+  ok: true,
+  value: {
+    css: ".card {
+  display: flex;
+  justify-content: center;
+  font-family: arial;
+  font-size: 20px;
+  color: black;
+  background-color: white;
+}
+.cloze {
+  font-weight: bold;
+  color: blue;
+}
+.nightMode .cloze {
+  color: lightblue;
+}",
+    fields: [
+      {
+        description: "問題文",
+        name: "Text",
+      },
+      {
+        description: "問題の取得元URL",
+        name: "SourceURL",
+      },
+    ],
+    id: 343480954545,
+    isCloze: true,
+    name: "システム英単語用穴埋め問題",
+    templates: [
+      {
+        answer: '{{cloze:Text}}
+<a href="{{SourceURL}}">source</a>',
+        name: "Card 1",
+        question: "{{cloze:Text}}
+{{type:Text}}",
+      },
+    ],
+  },
+}
+`;
