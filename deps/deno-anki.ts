@@ -1,1 +1,1 @@
-export * from "https://raw.githubusercontent.com/takker99/deno-anki/0.0.2/mod.ts";
+export * from "https://raw.githubusercontent.com/takker99/deno-anki/0.0.3/mod.ts";
