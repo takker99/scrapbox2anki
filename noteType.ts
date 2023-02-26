@@ -1,5 +1,5 @@
 import type { Result } from "./deps/scrapbox.ts";
-import Parser from "./deps/papaparse.ts";
+import { parse } from "./deps/csv.ts";
 import type { NoteType } from "./deps/deno-anki.ts";
 
 /** note typeデータの書式が不正だったときに投げるエラー */
@@ -11,8 +11,8 @@ export interface InvalidNoteTypeError {
 export const parseNoteType = (
   csv: string,
 ): Result<NoteType, InvalidNoteTypeError> => {
-  const { data } = Parser.parse<[string, string]>(csv);
-  const csvData = new Map<string, string>(data);
+  const data = parse(csv);
+  const csvData = new Map<string, string>(data.map(([f, s]) => [f, s]));
   const name = csvData.get("name");
   if (!name) {
     return { ok: false, value: makeError("Note Type name not found.") };

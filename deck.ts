@@ -1,5 +1,5 @@
 import type { Result } from "./deps/scrapbox.ts";
-import Parser from "./deps/papaparse.ts";
+import { parse } from "./deps/csv.ts";
 import type { Deck } from "./deps/deno-anki.ts";
 
 /** deckデータの書式が不正だったときに投げるエラー */
@@ -9,8 +9,8 @@ export interface InvalidDeckError {
 }
 
 export const parseDeck = (csv: string): Result<Deck, InvalidDeckError> => {
-  const { data } = Parser.parse<[string, string]>(csv);
-  const csvData = new Map<string, string>(data);
+  const data = parse(csv);
+  const csvData = new Map<string, string>(data.map(([f, s]) => [f, s]));
   const name = csvData.get("name");
   if (!name) return { ok: false, value: makeError("Deck name not found.") };
   const id_ = csvData.get("id");
