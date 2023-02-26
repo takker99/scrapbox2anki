@@ -34,8 +34,7 @@ snapshot[`parseNoteType() 1`] = `
     name: "システム英単語用穴埋め問題",
     templates: [
       {
-        answer: '{{cloze:Text}}
-<a href="{{SourceURL}}">source</a>',
+        answer: '{{cloze:Text}}<br><a href="{{SourceURL}}">source</a>',
         name: "Card 1",
         question: "{{cloze:Text}}
 {{type:Text}}",

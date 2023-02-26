@@ -25,7 +25,7 @@ export const parseNoteType = (
   }
 
   const answer = csvData.get("answer") ??
-    '{{cloze:Text}}\n<a href="{{SourceURL}}">source</a>';
+    '{{cloze:Text}}<br><a href="{{SourceURL}}">source</a>';
   const question = csvData.get("question") ?? "{{cloze:Text}}\n{{type:Text}}";
   const noteType: NoteType = {
     name,
