@@ -29,12 +29,19 @@ export const parseNotes = (
   lines: BaseLine[],
 ): ParseResult => {
   const parsed: ParseResult = { notes: [] };
+  if (lines.length === 0) return parsed;
   const packs = packRows(
     parseToRows(lines.map((line) => line.text).join("\n")),
     { hasTitle: true },
   );
-  /** 分割されたコードブロックを結合するのに使う */
-  const codes = new Map<string, [number, string]>();
+  /** 分割されたコードブロックを結合するのに使う
+   *
+   * 1. `noteId`
+   * 2. `lineId`
+   * 3. `updated`
+   * 4. `field`
+   */
+  const codes = new Map<string, [number, string, number, string]>();
   /** 現在読んでいる`pack.rows[0]`の行番号 */
   let counter = 0;
   for (const pack of packs) {
@@ -61,6 +68,12 @@ export const parseNotes = (
             line.created * 1000
           ),
         );
+        const lineId = lines[counter].id;
+        const updated = Math.max(
+          ...lines.slice(counter, counter + pack.rows.length).map((line) =>
+            line.updated
+          ),
+        );
         counter += pack.rows.length;
         const codeBlock = convertToBlock(pack);
         if (codeBlock.type !== "codeBlock") throw SyntaxError();
@@ -71,6 +84,8 @@ export const parseNotes = (
           guid,
           [
             noteId,
+            lineId,
+            updated * 1000,
             prev ? `${prev}\n${codeBlock.content}` : codeBlock.content,
           ],
         );
@@ -81,10 +96,15 @@ export const parseNotes = (
 
   // codeblocksをnoteに変換する
   parsed.notes.push(...[...codes.entries()].map(
-    ([guid, [id, text]]) => ({
+    ([guid, [noteId, lineId, updated, text]]) => ({
       guid,
-      id,
-      fields: [text, `https://scrapbox.io/${project}/${encodeTitleURI(title)}`],
+      id: noteId,
+      updated,
+      fields: [
+        // 改行は<br>に変換する
+        text.replaceAll("\n", "<br>"),
+        `https://scrapbox.io/${project}/${encodeTitleURI(title)}#${lineId}`,
+      ],
       // textをさらにparseして、hashtagを取り出す
       tags: parse(text).flatMap((block) => {
         if (block.type !== "line") return [];
