@@ -1,0 +1,184 @@
+[
+  {
+    "id": "63e9eed46d19ae001b92727e",
+    "text": "Scrapboxを使ったAnkiデータ構築案1：deck",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275414,
+    "updated": 1676544231
+  },
+  {
+    "id": "63e9eed51280f000006761b7",
+    "text": "table:deck",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275414,
+    "updated": 1676275415
+  },
+  {
+    "id": "63e9eed61280f000006761b8",
+    "text": " id\t44845749858349584",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275415,
+    "updated": 1676275415
+  },
+  {
+    "id": "63e9eed61280f000006761b9",
+    "text": " name\tsystem-english",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275415,
+    "updated": 1676275415
+  },
+  {
+    "id": "63e9eed61280f000006761ba",
+    "text": " description \tシステム英単語系の問題集",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275415,
+    "updated": 1676275415
+  },
+  {
+    "id": "63e9eed81280f000006761bd",
+    "text": "",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275417,
+    "updated": 1676275417
+  },
+  {
+    "id": "63e9ef181280f000006761c9",
+    "text": " 1ページ1deck",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275481,
+    "updated": 1676275492
+  },
+  {
+    "id": "63e9ef241280f000006761cd",
+    "text": "  1ページ n decksでもいい？",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275494,
+    "updated": 1676275502
+  },
+  {
+    "id": "63e9ef2d1280f000006761ce",
+    "text": "   [- [note type (Anki)]][- 側でtableのURLを直接指定することになって面倒？][takker.icon]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275502,
+    "updated": 1676544148
+  },
+  {
+    "id": "63ee08951280f000007279d6",
+    "text": "    [- [note type (Anki)]][- も頻繁に編集するわけではないので、多少面倒な指定方法でもかまわない]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676544148,
+    "updated": 1676544148
+  },
+  {
+    "id": "63ee08951280f000007279d7",
+    "text": "    [- むしろURL指定にすることで、gistにおいたcsvファイルを指定できるなど、応用が利く]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676544148,
+    "updated": 1676544148
+  },
+  {
+    "id": "63ee08951280f000007279d8",
+    "text": "     [- まあそんな需要があるとも思えないが]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676544148,
+    "updated": 1676544148
+  },
+  {
+    "id": "63ee08961280f000007279d9",
+    "text": "   [note (Anki)]ごとに指定したいので、1ページ1deckにし、アイコン記法で簡単に参照できるようにする",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676544149,
+    "updated": 1676544184
+  },
+  {
+    "id": "63ee08b91280f000007279da",
+    "text": "    [- [deck (Anki)]][- は][- [note (Anki)]][- ごとに変更できる]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676544184,
+    "updated": 1678866046
+  },
+  {
+    "id": "6411767e1280f00000baca56",
+    "text": "    [card (Anki)]ごとだった",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1678866047,
+    "updated": 1678866063
+  },
+  {
+    "id": "641176941280f00000baca58",
+    "text": "    [note (Anki)]は[deck (Anki)]とは独立して存在する",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1678866069,
+    "updated": 1678866105
+  },
+  {
+    "id": "63e9efe11280f000006761d4",
+    "text": " `id`はdeckを作った日時をUNIX millisecondsで記述する",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275682,
+    "updated": 1676275706
+  },
+  {
+    "id": "63e9eff91280f000006761d5",
+    "text": "  書くのが面倒だが、一回だけ書けばいいので手間ではない",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275706,
+    "updated": 1678866136
+  },
+  {
+    "id": "63e9ef1c1280f000006761cc",
+    "text": " `description`は省略可",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275485,
+    "updated": 1676275492
+  },
+  {
+    "id": "63e9efae1280f000006761d2",
+    "text": " `updated`はテーブル記法の各行の最終更新日時から取得する",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275631,
+    "updated": 1676275648
+  },
+  {
+    "id": "63e9ef191280f000006761cb",
+    "text": "",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275482,
+    "updated": 1676275482
+  },
+  {
+    "id": "63e9eed81280f000006761be",
+    "text": "頻繁に編集するものではないので、多少冗長なデータ表現であっても問題ない",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275417,
+    "updated": 1676275746
+  },
+  {
+    "id": "63e9eed61280f000006761bb",
+    "text": "",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275415,
+    "updated": 1676275415
+  },
+  {
+    "id": "641176911280f00000baca57",
+    "text": "#2023-03-15 16:41:06 ",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1678866066,
+    "updated": 1678866067
+  },
+  {
+    "id": "63ee08c81280f000007279db",
+    "text": "#2023-02-16 19:43:21 ",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676544199,
+    "updated": 1676544200
+  },
+  {
+    "id": "63e9eed61280f000006761bc",
+    "text": "#2023-02-13 16:57:21 ",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1676275415,
+    "updated": 1676275415
+  }
+]
