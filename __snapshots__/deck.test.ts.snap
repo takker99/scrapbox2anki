@@ -7,26 +7,7 @@ snapshot[`parseDeck() 1`] = `
     description: "システム英単語系の問題集",
     id: 44845749858349580,
     name: "system-english",
-  },
-}
-`;
-
-snapshot[`parseDeck() 2`] = `
-{
-  ok: true,
-  value: {
-    id: 44845749858349580,
-    name: "system-english",
-  },
-}
-`;
-
-snapshot[`parseDeck() 3`] = `
-{
-  ok: false,
-  value: {
-    message: "Deck name not found.",
-    name: "InvalidDeckError",
+    updated: 1676275415,
   },
 }
 `;

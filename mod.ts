@@ -1,10 +1,11 @@
 import {
-  getTable,
+  getPage,
   NotFoundError,
   NotLoggedInError,
   NotMemberError,
   Page,
   Result,
+  TooLongURIError,
 } from "./deps/scrapbox.ts";
 import {
   Deck,
@@ -16,7 +17,11 @@ import { JSZip } from "./deps/jsZip.ts";
 import { SqlJsStatic } from "./deps/sql.ts";
 import { parseNotes, Path } from "./note.ts";
 import { InvalidDeckError, parseDeck } from "./deck.ts";
-import { InvalidNoteTypeError, parseNoteType } from "./noteType.ts";
+import {
+  defaultNoteType,
+  InvalidNoteTypeError,
+  parseNoteType,
+} from "./noteType.ts";
 
 /** 既定のdeck */
 const defaultDeck: Deck = {
@@ -24,15 +29,13 @@ const defaultDeck: Deck = {
   id: 1,
 };
 
-/** 既定のNote type */
-// @ts-ignore NoteTypeしか帰ってこないはず
-const defaultNoteType: NoteType = parseNoteType(`name,Basic (Cloze)
-id,1677417085373
-isCloze,true`).value;
-
 type DeckResult = Result<
-  Deck,
-  InvalidDeckError | NotFoundError | NotLoggedInError | NotMemberError
+  Deck | undefined,
+  | InvalidDeckError
+  | NotFoundError
+  | NotLoggedInError
+  | NotMemberError
+  | TooLongURIError
 >;
 
 /** 読み込んだdecksのcache
@@ -54,17 +57,21 @@ const getDeck = (path: Path | undefined): Promise<DeckResult> => {
   if (deck) return deck;
 
   const promise = (async () => {
-    const result = await getTable(path.project, path.title, "deck");
+    const result = await getPage(path.project, path.title);
     if (!result.ok) return result;
-    return parseDeck(result.value);
+    return parseDeck(result.value.lines);
   })();
   decks.set(toKey(path), promise);
   return promise;
 };
 
 type NoteTypeResult = Result<
-  NoteType,
-  InvalidNoteTypeError | NotFoundError | NotLoggedInError | NotMemberError
+  NoteType | undefined,
+  | InvalidNoteTypeError
+  | NotFoundError
+  | NotLoggedInError
+  | NotMemberError
+  | TooLongURIError
 >;
 
 /** 読み込んだnote typesのcache
@@ -84,9 +91,9 @@ const getNoteType = (path: Path | undefined): Promise<NoteTypeResult> => {
   if (noteType) return noteType;
 
   const promise = (async () => {
-    const result = await getTable(path.project, path.title, "note type");
+    const result = await getPage(path.project, path.title);
     if (!result.ok) return result;
-    return parseNoteType(result.value);
+    return parseNoteType(result.value.lines);
   })();
   noteTypes.set(toKey(path), promise);
   return promise;
@@ -113,12 +120,14 @@ export const makeApkg = async (
     if (!deckRes.ok) {
       console.warn(`${deckRes.value.name} ${deckRes.value.message}`);
     }
-    const deck = deckRes.ok ? deckRes.value : defaultDeck;
+    const deck = deckRes.ok ? (deckRes.value ?? defaultDeck) : defaultDeck;
     const noteTypeRes = await getNoteType(noteTypeRef);
     if (!noteTypeRes.ok) {
       console.warn(`${noteTypeRes.value.name} ${noteTypeRes.value.message}`);
     }
-    const noteType = noteTypeRes.ok ? noteTypeRes.value : defaultNoteType;
+    const noteType = noteTypeRes.ok
+      ? (noteTypeRes.value ?? defaultNoteType)
+      : defaultNoteType;
     return notes_.map((note) => ({ deck, noteType, ...note }));
   }))).flat();
 

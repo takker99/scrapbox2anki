@@ -40,6 +40,7 @@ snapshot[`parseNoteType() 1`] = `
 {{type:Text}}",
       },
     ],
+    updated: 1676275810,
   },
 }
 `;

@@ -1,15 +1,7 @@
 import { parseNoteType } from "./noteType.ts";
 import { assertSnapshot } from "./deps/testing.ts";
+import lines from "./sample-noteType1.json" assert { type: "json" };
 
 Deno.test("parseNoteType()", async (t) => {
-  await assertSnapshot(
-    t,
-    parseNoteType(
-      `name,システム英単語用穴埋め問題
-id,343480954545
-isCloze,true
-latex
-css,https://scrapbox.io/api/code/takker/システム英単語用穴埋め問題案1/css`,
-    ),
-  );
+  await assertSnapshot(t, parseNoteType(lines));
 });
