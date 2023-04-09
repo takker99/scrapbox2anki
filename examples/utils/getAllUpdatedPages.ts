@@ -42,8 +42,8 @@ export async function* getAllUpdatedPages(
           ? [getPage(project, page.title, { ...rest, fetch })]
           : [],
     );
-    for await (const promise of promises) {
-      yield await promise;
+    for (const promise of promises) {
+      yield promise;
     }
     if ((result.value.pages.pop()?.updated ?? 0) <= lastChecked) break;
     skip += 1000;
