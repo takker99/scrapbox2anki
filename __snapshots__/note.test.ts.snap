@@ -4,11 +4,11 @@ snapshot[`parseNotes 1`] = `
 {
   deckRef: {
     project: "takker-dist",
-    title: "テスト用deck",
+    title: "deck-テスト用deck",
   },
   noteTypeRef: {
-    project: "takker",
-    title: "Scrapboxを使ったAnkiデータ構築案1:note type",
+    project: "takker-dist",
+    title: "NoteType-穴埋めサンプル",
   },
   notes: [
     {
