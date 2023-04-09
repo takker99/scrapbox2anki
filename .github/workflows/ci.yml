@@ -14,5 +14,7 @@ jobs:
         run: deno fmt --check
       - name: Run lint
         run: deno lint
+      - name: Run type check
+        run: deno type check mod.ts ./examples/*.ts
       - name: Run test
         run: deno test --allow-read
