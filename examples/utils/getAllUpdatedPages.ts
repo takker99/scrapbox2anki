@@ -36,14 +36,9 @@ export async function* getAllUpdatedPages(
       return;
     }
 
-    const promises = result.value.pages.flatMap(
-      (page) =>
-        page.updated > lastChecked
-          ? [getPage(project, page.title, { ...rest, fetch })]
-          : [],
-    );
-    for (const promise of promises) {
-      yield promise;
+    for (const page of result.value.pages) {
+      if (page.updated <= lastChecked) continue;
+      yield getPage(project, page.title, { ...rest, fetch });
     }
     if ((result.value.pages.pop()?.updated ?? 0) <= lastChecked) break;
     skip += 1000;
