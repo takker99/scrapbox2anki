@@ -20,9 +20,6 @@ export interface Path {
   title: string;
 }
 
-const deckRegExp = /^deck:\[([^[\]]*)\.icon(?:\*[1-9]\d*)?\]/;
-const noteTypeRegExp = /^noteType:\[([^[\]]*)\.icon(?:\*[1-9]\d*)?\]/;
-
 export const parseNotes = (
   project: string,
   title: string,
@@ -50,15 +47,27 @@ export const parseNotes = (
         counter++;
         break;
       case "table":
-        counter += pack.rows.length;
-        break;
       case "line": {
-        // iconがある行を雑に調べる
-        const match = pack.rows[0].text.match(deckRegExp)?.[1];
-        if (match) parsed.deckRef = parsePath(match, project);
-        const match2 = pack.rows[0].text.match(noteTypeRegExp)?.[1];
-        if (match2) parsed.noteTypeRef = parsePath(match2, project);
-        counter++;
+        counter += pack.rows.length;
+        if (parsed.deckRef && parsed.noteTypeRef) break;
+
+        // iconがある行を調べる
+        const block = convertToBlock(pack);
+        const icons = block.type === "line"
+          ? block.nodes.flatMap((node) => getIcons(node))
+          : block.type === "table"
+          ? block.cells.flatMap((row) =>
+            row.flatMap((cell) => cell.flatMap((node) => getIcons(node)))
+          )
+          : [];
+        for (const icon of icons) {
+          if (icon.toLowerCase().startsWith("deck-")) {
+            parsed.deckRef ??= parsePath(icon, project);
+          }
+          if (icon.toLowerCase().startsWith("notetype-")) {
+            parsed.noteTypeRef ??= parsePath(icon, project);
+          }
+        }
         break;
       }
       case "codeBlock": {
@@ -124,6 +133,19 @@ const getHashTags = (node: Node): string[] => {
     case "decoration":
     case "quote":
       return node.nodes.flatMap((node) => getHashTags(node));
+    default:
+      return [];
+  }
+};
+
+const getIcons = (node: Node): string[] => {
+  switch (node.type) {
+    case "icon":
+    case "strongIcon":
+      return [node.path];
+    case "decoration":
+    case "quote":
+      return node.nodes.flatMap((node) => getIcons(node));
     default:
       return [];
   }

@@ -13,19 +13,19 @@
     "id": "5ef2bdebb60650001e1280f0",
     "name": "takker",
     "displayName": "takker",
-    "photo": "https://lh3.googleusercontent.com/a/AEdFTp5ZjA62crJpg6_eUg0wkIvPXm36hWWC3gyzzuZZ=s96-c"
+    "photo": "https://lh3.googleusercontent.com/a/AGNmyxaA5UAD_2lwKhNLhf6N2HgxrkJ-u8tlRHpQzWFJ=s96-c"
   },
   "pin": 0,
-  "views": 6,
+  "views": 18,
   "linked": 0,
-  "commitId": "63f9e06ebe2e18001bff7db0",
+  "commitId": "643294bbcafa84001c7071de",
   "created": 1676878936,
-  "updated": 1677320302,
-  "accessed": 1677320278,
-  "snapshotCreated": 1677320282,
-  "snapshotCount": 1,
+  "updated": 1681036225,
+  "accessed": 1681036477,
+  "snapshotCreated": 1681036165,
+  "snapshotCount": 3,
   "pageRank": 0,
-  "lastAccessed": 1677320440,
+  "lastAccessed": 1681036481,
   "persistent": true,
   "lines": [
     {
@@ -107,17 +107,10 @@
     },
     {
       "id": "63f329791280f00000b36227",
-      "text": "deck:[テスト用deck.icon]",
+      "text": "[deck-テスト用deck.icon][NoteType-穴埋めサンプル.icon]",
       "userId": "5ef2bdebb60650001e1280f0",
       "created": 1676880250,
-      "updated": 1676880392
-    },
-    {
-      "id": "63f32a081280f00000b36230",
-      "text": "noteType:[/takker/Scrapboxを使ったAnkiデータ構築案1:note type.icon]",
-      "userId": "5ef2bdebb60650001e1280f0",
-      "created": 1676880392,
-      "updated": 1676880438
+      "updated": 1681036225
     },
     {
       "id": "63f329781280f00000b36225",
@@ -386,7 +379,7 @@
     "ダブスタクソ親父"
   ],
   "projectLinks": [],
-  "icons": ["テスト用deck"],
+  "icons": ["deck-テスト用deck", "NoteType-穴埋めサンプル"],
   "files": [],
   "relatedPages": {
     "links1hop": [],
@@ -424,8 +417,8 @@
         ],
         "linked": 1,
         "created": null,
-        "updated": 1676881465,
-        "accessed": 1676956125,
+        "updated": 1677321864,
+        "accessed": 1680046432,
         "projectName": "takker"
       }
     ],

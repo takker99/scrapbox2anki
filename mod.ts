@@ -136,6 +136,7 @@ export const makeApkg = async (
     value: await makePackage(
       makeCollection(notes, init.sql),
       {},
+      //@ts-ignore 外部moduleが使っているJSZipのversionの食い違いで、どうしても型エラーが生じてしまう
       init.jsZip,
     ),
   };
