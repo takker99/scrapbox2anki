@@ -46,7 +46,6 @@ declare const JSZip: typeof JSZipType;
   const pages: Page[] = [];
   const { render, dispose } = useStatusBar();
   try {
-    let animationId: number | undefined;
     for await (
       const result of getAllUpdatedPages(project, prevChecked)
     ) {
@@ -56,14 +55,11 @@ declare const JSZip: typeof JSZipType;
         return;
       }
       pages.push(result.value);
-      if (animationId !== undefined) cancelAnimationFrame(animationId);
-      animationId = requestAnimationFrame(() => {
-        render({ type: "spinner" }, {
-          type: "text",
-          text: `loading ${pages.length} pages updated after ${new Date(
-            prevChecked,
-          )}`,
-        });
+      render({ type: "spinner" }, {
+        type: "text",
+        text: `loading ${pages.length} pages updated after ${new Date(
+          prevChecked,
+        )}`,
       });
     }
 
