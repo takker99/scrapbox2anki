@@ -29,8 +29,8 @@ declare const JSZip: typeof JSZipType;
     if (!res.ok) return 0;
     try {
       const json = JSON.parse(res.value);
-      if (typeof json.created !== "number") return 0;
-      return json.created;
+      if (typeof json.checked !== "number") return 0;
+      return json.checked;
     } catch (e: unknown) {
       if (!(e instanceof SyntaxError)) throw e;
       return 0;
