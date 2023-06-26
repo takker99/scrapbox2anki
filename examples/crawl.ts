@@ -4,7 +4,7 @@
 /// <reference lib="esnext" />
 // <reference lib="dom" />
 import { makeApkg } from "../mod.ts";
-import { getPage, Page } from "../deps/scrapbox.ts";
+import { getCodeBlock, Page } from "../deps/scrapbox.ts";
 import type { JSZip as JSZipType } from "../deps/jsZip.ts";
 import { getAllUpdatedPages } from "./utils/getAllUpdatedPages.ts";
 import { patch, Scrapbox, useStatusBar } from "../deps/scrapbox-userscript.ts";
@@ -24,12 +24,17 @@ declare const JSZip: typeof JSZipType;
 
   /** 前回apkgを書き出した日時を得る */
   const getChecked = async () => {
-    const res = await getPage(project, settingTitle);
+    const res = await getCodeBlock(project, settingTitle, "json");
 
     if (!res.ok) return 0;
-    const checked = res.value.lines.find((line) => /^\d+$/.test(line.text))
-      ?.text ?? "0";
-    return parseInt(checked);
+    try {
+      const json = JSON.parse(res.value);
+      if (typeof json.created !== "number") return 0;
+      return json.created;
+    } catch (e: unknown) {
+      if (!(e instanceof SyntaxError)) throw e;
+      return 0;
+    }
   };
 
   /** apkgを書き出した日時を書き込む */
@@ -38,7 +43,8 @@ declare const JSZip: typeof JSZipType;
       settingTitle,
       "This page is automatically generated. DO NOT EDIT ANYTHING, WHITCH WILL BE OVERWRITTEN.",
       "",
-      `${checked}`,
+      "code:json",
+      ` ${JSON.stringify({ checked })}`,
     ]);
 
   const prevChecked = await getChecked();
