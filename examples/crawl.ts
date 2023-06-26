@@ -58,7 +58,7 @@ declare const JSZip: typeof JSZipType;
       render({ type: "spinner" }, {
         type: "text",
         text: `loading ${pages.length} pages updated after ${new Date(
-          prevChecked,
+          prevChecked * 1000,
         )}`,
       });
     }
