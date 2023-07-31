@@ -1,0 +1,527 @@
+[
+  {
+    "id": "6498f1726069db001b4550ba",
+    "text": "⬜deck (Anki)とnote type (Anki)の設定をtable記法ではなくJSONにしたい",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687744883,
+    "updated": 1687744883
+  },
+  {
+    "id": "6498f1751280f000007e4f0f",
+    "text": "[Scrapboxを使ったAnkiデータ構築案1]と[Scrapboxを使ったAnkiデータ構築案：穴埋め特化ver]では、[deck (Anki)]と[note type (Anki)]の指定に[table記法]を用いた",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687744887,
+    "updated": 1687744924
+  },
+  {
+    "id": "6498f1b01280f000007e4f12",
+    "text": " なぜtable記法にしたかは覚えていない[takker.icon]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687744946,
+    "updated": 1687744956
+  },
+  {
+    "id": "6498f1bb1280f000007e4f14",
+    "text": " たしか、アイコン記法を使ってなにかを示したかったからだったかな",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687744956,
+    "updated": 1687744974
+  },
+  {
+    "id": "6498f1cc1280f000007e4f15",
+    "text": " 井戸端の方に書いたはずなので、いずれ参照する",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687744974,
+    "updated": 1687744984
+  },
+  {
+    "id": "6498f1dd1280f000007e4f1a",
+    "text": "",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687744991,
+    "updated": 1687744993
+  },
+  {
+    "id": "6498f1e11280f000007e4f1b",
+    "text": "しかし、tableをparseするよりJSONをparseするほうがやりやすいので、そっちにしたい",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687744994,
+    "updated": 1687745011
+  },
+  {
+    "id": "6498f1d71280f000007e4f17",
+    "text": "",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687744985,
+    "updated": 1687744985
+  },
+  {
+    "id": "6498f25e1280f000007e4f1d",
+    "text": "現状のdeck, note typeの型定義に会うようにJSONを設定する",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745120,
+    "updated": 1687745134
+  },
+  {
+    "id": "6498f26c1280f000007e4f1e",
+    "text": "　ていうか、型定義をそのまま使えばいいか",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745134,
+    "updated": 1687745143
+  },
+  {
+    "id": "6498f2761280f000007e4f1f",
+    "text": "　型定義は[deno-anki]で定義されている",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745143,
+    "updated": 1687745190
+  },
+  {
+    "id": "6498f2d31280f000007e4f22",
+    "text": "　[https://code2svg.vercel.app/svg/L9-15/https://raw.githubusercontent.com/takker99/deno-anki/master/mod.ts#.svg https://github.com/takker99/deno-anki/blob/master/mod.ts#L9-L15]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745236,
+    "updated": 1687745236
+  },
+  {
+    "id": "6498f2d31280f000007e4f23",
+    "text": "　[https://code2svg.vercel.app/svg/L28-43/https://raw.githubusercontent.com/takker99/deno-anki/master/mod.ts#.svg https://github.com/takker99/deno-anki/blob/master/mod.ts#L28-L43]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745236,
+    "updated": 1687745236
+  },
+  {
+    "id": "6498f2fc1280f000007e4f24",
+    "text": "　 [https://code2svg.vercel.app/svg/L45-51/https://raw.githubusercontent.com/takker99/deno-anki/master/mod.ts#.svg https://github.com/takker99/deno-anki/blob/master/mod.ts#L45-L51]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745277,
+    "updated": 1687745304
+  },
+  {
+    "id": "6498f3171280f000007e4f26",
+    "text": "　 [https://code2svg.vercel.app/svg/L53-58/https://raw.githubusercontent.com/takker99/deno-anki/master/mod.ts#.svg https://github.com/takker99/deno-anki/blob/master/mod.ts#L53-L58]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745304,
+    "updated": 1687745304
+  },
+  {
+    "id": "6498f3751280f000007e4f28",
+    "text": "",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745398,
+    "updated": 1687745398
+  },
+  {
+    "id": "6498f3751280f000007e4f29",
+    "text": "案",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745398,
+    "updated": 1687745400
+  },
+  {
+    "id": "6498f3771280f000007e4f2a",
+    "text": " [deck (Anki)]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745400,
+    "updated": 1687745402
+  },
+  {
+    "id": "6498f4e61280f000007e4f32",
+    "text": "  `updated`以外を書くだけ",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745768,
+    "updated": 1687745772
+  },
+  {
+    "id": "6498f4eb1280f000007e4f33",
+    "text": "  code:deck.json",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745772,
+    "updated": 1687745777
+  },
+  {
+    "id": "6498f4f01280f000007e4f34",
+    "text": "   {",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745778,
+    "updated": 1687745779
+  },
+  {
+    "id": "6498f4f21280f000007e4f35",
+    "text": "     \"id\": 44845749858349584,",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745779,
+    "updated": 1687745801
+  },
+  {
+    "id": "6498f5011280f000007e4f38",
+    "text": "     \"name\": \"system-english\",",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745794,
+    "updated": 1687745808
+  },
+  {
+    "id": "6498f5011280f000007e4f39",
+    "text": "     \"description\": \"システム英単語系の問題集\"",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745794,
+    "updated": 1687745817
+  },
+  {
+    "id": "6498f4f21280f000007e4f36",
+    "text": "   }",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745780,
+    "updated": 1687745780
+  },
+  {
+    "id": "6498f4e21280f000007e4f31",
+    "text": " [note type (Anki)]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745764,
+    "updated": 1687745766
+  },
+  {
+    "id": "6498f3791280f000007e4f2b",
+    "text": "  `css`と`latex`以外はすべて型定義どおりにJSONをコードブロックに書く",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745402,
+    "updated": 1687745430
+  },
+  {
+    "id": "6498f5b81280f000007e4f4b",
+    "text": "   code:notetype.json",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745977,
+    "updated": 1687745978
+  },
+  {
+    "id": "6498f5b81280f000007e4f4c",
+    "text": "    {",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745977,
+    "updated": 1687745978
+  },
+  {
+    "id": "6498f5b81280f000007e4f4d",
+    "text": "      \"id\": 343480954545,",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745977,
+    "updated": 1687745978
+  },
+  {
+    "id": "6498f5b81280f000007e4f4e",
+    "text": "      \"name\": \"システム英単語用穴埋め問題\",",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745977,
+    "updated": 1687745978
+  },
+  {
+    "id": "6498f5b81280f000007e4f4f",
+    "text": "      \"isCloze\": true,",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745977,
+    "updated": 1687745978
+  },
+  {
+    "id": "6498f5b81280f000007e4f50",
+    "text": "      \"fields\": [\"Text\", \"Description\", \"SourceURL\"],",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745977,
+    "updated": 1687745978
+  },
+  {
+    "id": "6498f5b81280f000007e4f51",
+    "text": "    }",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745977,
+    "updated": 1687745978
+  },
+  {
+    "id": "6498f3951280f000007e4f2c",
+    "text": "  `css`は`code:css`に、`latex`は`pre.tex`と`post.tex`に書く",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745430,
+    "updated": 1687745453
+  },
+  {
+    "id": "6498f5b31280f000007e4f4a",
+    "text": "   code:css",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745972,
+    "updated": 1687746001
+  },
+  {
+    "id": "6498f5c61280f000007e4f52",
+    "text": "    .card {",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745991,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f53",
+    "text": "      display: flex;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f54",
+    "text": "      justify-content: center;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f55",
+    "text": "      font-family: arial;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f56",
+    "text": "      font-size: 20px;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f57",
+    "text": "      color: black;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f58",
+    "text": "      background-color: white;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f59",
+    "text": "    }",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f5a",
+    "text": "    .cloze {",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f5b",
+    "text": "      font-weight: bold;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f5c",
+    "text": "      color: blue;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f5d",
+    "text": "    }",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f5e",
+    "text": "    .nightMode .cloze {",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f5f",
+    "text": "      color: lightblue;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f5c61280f000007e4f60",
+    "text": "    }",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745992,
+    "updated": 1687745992
+  },
+  {
+    "id": "6498f25e1280f000007e4f1c",
+    "text": "  [template (Anki)]も別のcode blockに書くか？",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745120,
+    "updated": 1687745971
+  },
+  {
+    "id": "6498f3e21280f000007e4f2d",
+    "text": "   複数のtemplateを指定できるから、ややこしくなりそう",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745507,
+    "updated": 1687745971
+  },
+  {
+    "id": "6498f3eb1280f000007e4f2e",
+    "text": "   まあ`code:name.answer.html`みたくすれば区別できるが……`example`の指定が難しくなる",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745516,
+    "updated": 1687745971
+  },
+  {
+    "id": "6498f4bf1280f000007e4f30",
+    "text": "   `example`は指定できなくてもいいか。",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745729,
+    "updated": 1687745971
+  },
+  {
+    "id": "6498f60c1280f000007e4f6a",
+    "text": "   code:Card 1.question.html",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687746062,
+    "updated": 1687746067
+  },
+  {
+    "id": "6498f60c1280f000007e4f6b",
+    "text": "    {{cloze:Text}}",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687746062,
+    "updated": 1687746080
+  },
+  {
+    "id": "6498f61f1280f000007e4f6e",
+    "text": "    {{type:Text}}",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687746080,
+    "updated": 1687746080
+  },
+  {
+    "id": "6498f5d31280f000007e4f61",
+    "text": "   code:Card 1.answer.html",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687746061,
+    "updated": 1687746061
+  },
+  {
+    "id": "6498f5eb1280f000007e4f62",
+    "text": "    {{cloze:Text}}",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687746061,
+    "updated": 1687746061
+  },
+  {
+    "id": "6498f6011280f000007e4f63",
+    "text": "    <hr>",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687746061,
+    "updated": 1687746093
+  },
+  {
+    "id": "6498f6021280f000007e4f64",
+    "text": "    <a href=\"{{SourceURL}}\">source</a>",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687746061,
+    "updated": 1687746061
+  },
+  {
+    "id": "6498f31c1280f000007e4f27",
+    "text": "",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687745309,
+    "updated": 1687745309
+  },
+  {
+    "id": "64c70ade1280f00000307b2e",
+    "text": "実装",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1690766047,
+    "updated": 1690766048
+  },
+  {
+    "id": "64c70adf1280f00000307b2f",
+    "text": "　現在",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1690766048,
+    "updated": 1690766049
+  },
+  {
+    "id": "64c70ae11280f00000307b30",
+    "text": "　　(deck|note type)が書き込まれたページを構文解析してデータを取得する",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1690766049,
+    "updated": 1690766070
+  },
+  {
+    "id": "64c70af91280f00000307b31",
+    "text": "　変更後",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1690766074,
+    "updated": 1690766077
+  },
+  {
+    "id": "64c70afd1280f00000307b32",
+    "text": "　 [- [api/code/:projectname/:pagetitle/:filename]][- から直接JSONを取得する]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1690766078,
+    "updated": 1690766216
+  },
+  {
+    "id": "64c70b871280f00000307b34",
+    "text": "   [- この場合parseDeckなどが不要になる]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1690766216,
+    "updated": 1690766216
+  },
+  {
+    "id": "64c70b881280f00000307b35",
+    "text": "  更新日時を取得したいので、引き続き`Line[]`からデータを取り出そう",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1690766217,
+    "updated": 1690766237
+  },
+  {
+    "id": "64c70ade1280f00000307b2d",
+    "text": "",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1690766047,
+    "updated": 1690766047
+  },
+  {
+    "id": "64c70ba71280f00000307b36",
+    "text": "#2023-07-31 10:17:28 ",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1690766248,
+    "updated": 1690766249
+  },
+  {
+    "id": "6498f1d71280f000007e4f18",
+    "text": "#2023-06-26 11:03:04 ",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687744985,
+    "updated": 1687744986
+  },
+  {
+    "id": "6498f19b1280f000007e4f11",
+    "text": "",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687744924,
+    "updated": 1687744924
+  },
+  {
+    "id": "6498f1761280f000007e4f10",
+    "text": "",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1687744887,
+    "updated": 1687744887
+  }
+]
