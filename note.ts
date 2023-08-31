@@ -95,7 +95,7 @@ export const parseNotes = (
             noteId,
             lineId,
             updated * 1000,
-            prev ? `${prev}\n${codeBlock.content}` : codeBlock.content,
+            prev ? `${prev[3]}\n${codeBlock.content}` : codeBlock.content,
           ],
         );
         break;
