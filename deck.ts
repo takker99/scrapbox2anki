@@ -21,7 +21,7 @@ export interface DeckNotFoundError {
 /** ページ本文からDeckを抽出する
  *
  * @param lines メタデータつきページ本文
- * @return 解析結果。テーブルが見つからなければ`undefined`を返す
+ * @return 解析結果
  */
 export const parseDeck = (
   lines: BaseLine[],

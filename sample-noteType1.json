@@ -1,128 +1,345 @@
 [
   {
-    "id": "63e9f02a02d302001b4ae1f9",
-    "text": "Scrapboxを使ったAnkiデータ構築案1:note type",
+    "id": "64f03567a25588001b0b5b27",
+    "text": "Scrapboxを使ったAnkiデータ構築案2:note type",
     "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676275779,
-    "updated": 1676596701
+    "created": 1693463912,
+    "updated": 1693463942
   },
   {
-    "id": "63e9f0441280f000006761df",
-    "text": "[note type (Anki)]をテーブル記法で記述する",
+    "id": "64f035681280f000009144fa",
+    "text": "[note type (Anki)]を[コードブロック記法]で記述する",
     "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676275781,
-    "updated": 1676275795
+    "created": 1693463912,
+    "updated": 1693463950
   },
   {
-    "id": "63e9f0421280f000006761d6",
-    "text": " table:note type",
-    "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676275779,
-    "updated": 1676275797
-  },
-  {
-    "id": "63e9f0421280f000006761d7",
-    "text": "  name\tシステム英単語用穴埋め問題",
-    "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676275779,
-    "updated": 1676275797
-  },
-  {
-    "id": "63e9f0421280f000006761d8",
-    "text": "  id\t343480954545",
-    "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676275779,
-    "updated": 1676275797
-  },
-  {
-    "id": "63e9f0421280f000006761da",
-    "text": "  isCloze\ttrue",
-    "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676275779,
-    "updated": 1676275797
-  },
-  {
-    "id": "63e9f0421280f000006761db",
-    "text": "  latex",
-    "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676275779,
-    "updated": 1676275797
-  },
-  {
-    "id": "63e9f0591280f000006761e1",
-    "text": "  css\thttps://scrapbox.io/api/code/takker/システム英単語用穴埋め問題案1/css",
-    "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676275802,
-    "updated": 1676275810
-  },
-  {
-    "id": "63f329a81280f0000051db7a",
+    "id": "64f0362f1280f00000914524",
     "text": "",
     "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676880297,
-    "updated": 1676880297
+    "created": 1693464112,
+    "updated": 1693464112
   },
   {
-    "id": "63eed5a41280f00000bd8bad",
+    "id": "64f035a01280f0000091451b",
+    "text": "code:noteType.json",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693463968,
+    "updated": 1693464109
+  },
+  {
+    "id": "64f035a31280f0000091451c",
+    "text": " {",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693463972,
+    "updated": 1693464109
+  },
+  {
+    "id": "64f035a41280f0000091451d",
+    "text": "   \"id\": 343480954545,",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693463972,
+    "updated": 1693464109
+  },
+  {
+    "id": "64f035a41280f0000091451e",
+    "text": "   \"name\": \"システム英単語用穴埋め問題\",",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693463972,
+    "updated": 1693464109
+  },
+  {
+    "id": "64f036451280f00000914528",
     "text": "defaultのdeckは指定しない",
     "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676596644,
-    "updated": 1676596678
+    "created": 1693464133,
+    "updated": 1693464133
   },
   {
-    "id": "63eed5ab1280f00000bd8bae",
+    "id": "64f036451280f00000914529",
     "text": " [note (Anki)]を記述する際に個別に指定する",
     "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676596651,
-    "updated": 1676596675
+    "created": 1693464133,
+    "updated": 1693464133
   },
   {
-    "id": "63eed5a31280f00000bd8bac",
+    "id": "64f036411280f00000914527",
+    "text": "code:noteType.json",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464129,
+    "updated": 1693464131
+  },
+  {
+    "id": "64f035a41280f0000091451f",
+    "text": "   \"isCloze\": true,",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693463972,
+    "updated": 1693464109
+  },
+  {
+    "id": "64f0386c1280f00000914552",
+    "text": "   \"fields\": [",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464684,
+    "updated": 1693464684
+  },
+  {
+    "id": "64f0386c1280f00000914553",
+    "text": "     { \"name\": \"Text\", \"description\": \"問題文\" },",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464684,
+    "updated": 1693465101
+  },
+  {
+    "id": "64f0386c1280f00000914554",
+    "text": "     \"Description\",",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464684,
+    "updated": 1693464684
+  },
+  {
+    "id": "64f0386c1280f00000914555",
+    "text": "     { \"name\": \"SourceURL\", \"description\": \"問題の取得元URL\" }",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464684,
+    "updated": 1693465105
+  },
+  {
+    "id": "64f0386c1280f00000914556",
+    "text": "   ]",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464684,
+    "updated": 1693464688
+  },
+  {
+    "id": "64f035a41280f00000914521",
+    "text": " }",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693463972,
+    "updated": 1693464109
+  },
+  {
+    "id": "64f035681280f00000914500",
     "text": "",
     "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676596643,
-    "updated": 1676596643
+    "created": 1693463912,
+    "updated": 1693463912
   },
   {
-    "id": "63e9f0421280f000006761dd",
-    "text": "code:css",
+    "id": "64f036511280f0000091452b",
+    "text": "`css`は`code:css`に書く",
     "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676275779,
-    "updated": 1676275779
+    "created": 1693464145,
+    "updated": 1693464156
   },
   {
-    "id": "63e9f0421280f000006761de",
-    "text": " ",
+    "id": "64f036521280f0000091452c",
+    "text": " code:css",
     "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676275779,
-    "updated": 1676275779
+    "created": 1693464146,
+    "updated": 1693464149
   },
   {
-    "id": "63eed5cd1280f00000bd8baf",
+    "id": "64f036521280f0000091452d",
+    "text": "  .card {",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f0000091452e",
+    "text": "    display: flex;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f0000091452f",
+    "text": "    justify-content: center;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f00000914530",
+    "text": "    font-family: arial;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f00000914531",
+    "text": "    font-size: 20px;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f00000914532",
+    "text": "    color: black;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f00000914533",
+    "text": "    background-color: white;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f00000914534",
+    "text": "  }",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f00000914535",
+    "text": "  .cloze {",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f00000914536",
+    "text": "    font-weight: bold;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f00000914537",
+    "text": "    color: blue;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f00000914538",
+    "text": "  }",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f00000914539",
+    "text": "  .nightMode .cloze {",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f0000091453a",
+    "text": "    color: lightblue;",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036521280f0000091453b",
+    "text": "  }",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464149
+  },
+  {
+    "id": "64f036601280f00000914548",
+    "text": "`latex`は`pre.tex`と`post.tex`に書く",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464160,
+    "updated": 1693464160
+  },
+  {
+    "id": "64f036671280f00000914549",
+    "text": "[template (Anki)]は`:templateName.question.html`と`:templateName.answer.html`のそれぞれに、`:templateName`の表面・裏面のHTMLを書く",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464167,
+    "updated": 1693464220
+  },
+  {
+    "id": "64f036a11280f0000091454b",
+    "text": " `example`は指定不能",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464225,
+    "updated": 1693464234
+  },
+  {
+    "id": "64f036521280f00000914540",
+    "text": " code:Card 1.question.html",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464237
+  },
+  {
+    "id": "64f036521280f00000914541",
+    "text": "  {{cloze:Text}}",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464237
+  },
+  {
+    "id": "64f036521280f00000914542",
+    "text": "  {{type:Text}}",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464237
+  },
+  {
+    "id": "64f036521280f00000914543",
+    "text": " code:Card 1.answer.html",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464238
+  },
+  {
+    "id": "64f036521280f00000914544",
+    "text": "  {{cloze:Text}}",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464238
+  },
+  {
+    "id": "64f036521280f00000914545",
+    "text": "  <hr>",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464238
+  },
+  {
+    "id": "64f036ba1280f0000091454c",
+    "text": "  {{Description}}",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464250,
+    "updated": 1693464258
+  },
+  {
+    "id": "64f036521280f00000914546",
+    "text": "  <a href=\"{{SourceURL}}\">source</a>",
+    "userId": "5ef2bdebb60650001e1280f0",
+    "created": 1693464146,
+    "updated": 1693464238
+  },
+  {
+    "id": "64f036471280f0000091452a",
     "text": "",
     "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676596685,
-    "updated": 1676596685
+    "created": 1693464135,
+    "updated": 1693464135
   },
   {
-    "id": "63eed5d51280f00000bd8bb2",
-    "text": "#2023-02-17 10:18:14 ",
+    "id": "64f0363b1280f00000914525",
+    "text": "#2023-08-31 15:42:05 ",
     "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676596693,
-    "updated": 1676596694
+    "created": 1693464123,
+    "updated": 1693464125
   },
   {
-    "id": "63eed5cd1280f00000bd8bb0",
-    "text": "#2023-02-13",
-    "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676596685,
-    "updated": 1676596692
-  },
-  {
-    "id": "63eed5ce1280f00000bd8bb1",
+    "id": "64f0363d1280f00000914526",
     "text": "",
     "userId": "5ef2bdebb60650001e1280f0",
-    "created": 1676596686,
-    "updated": 1676596686
+    "created": 1693464125,
+    "updated": 1693464125
   }
 ]
