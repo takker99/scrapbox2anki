@@ -134,6 +134,8 @@ export const parseNotes = (
 
   return [...notes.values()].map((note) => ({
     ...note,
+    deck: deckRef,
+    noteType: noteTypeRef,
     // textをさらにparseして、hashtagを取り出す
     tags: parse(note.fields.get("") ?? "").flatMap((block) => {
       if (block.type !== "line") return [];
