@@ -4,7 +4,8 @@ snapshot[`parseNoteType() 1`] = `
 {
   ok: true,
   value: {
-    css: ".card {
+    css: "
+.card {
   display: flex;
   justify-content: center;
   font-family: arial;
@@ -25,6 +26,9 @@ snapshot[`parseNoteType() 1`] = `
         name: "Text",
       },
       {
+        name: "Description",
+      },
+      {
         description: "問題の取得元URL",
         name: "SourceURL",
       },
@@ -34,13 +38,18 @@ snapshot[`parseNoteType() 1`] = `
     name: "システム英単語用穴埋め問題",
     templates: [
       {
-        answer: '{{cloze:Text}}<br><a href="{{SourceURL}}">source</a>',
+        answer: '
+{{cloze:Text}}
+<hr>
+{{Description}}
+<a href="{{SourceURL}}">source</a>',
         name: "Card 1",
-        question: "{{cloze:Text}}
+        question: "
+{{cloze:Text}}
 {{type:Text}}",
       },
     ],
-    updated: 1676275810,
+    updated: 1693465105,
   },
 }
 `;

@@ -16,10 +16,10 @@ import {
 import { JSZip } from "./deps/jsZip.ts";
 import { SqlJsStatic } from "./deps/sql.ts";
 import { parseNotes, Path } from "./note.ts";
-import { InvalidDeckError, parseDeck } from "./deck.ts";
+import { DeckNotFoundError, InvalidDeckError, parseDeck } from "./deck.ts";
 import {
-  defaultNoteType,
   InvalidNoteTypeError,
+  NoteTypeNotFoundError,
   parseNoteType,
 } from "./noteType.ts";
 
@@ -29,8 +29,40 @@ const defaultDeck: Deck = {
   id: 1,
 };
 
+/** 既定のNote type */
+export const defaultNoteType: NoteType = {
+  name: "Basic (Cloze)",
+  id: 1677417085373,
+  fields: [
+    { name: "Text", description: "問題文" },
+    { name: "SourceURL", description: "問題の取得元URL" },
+  ],
+  isCloze: true,
+  templates: [{
+    name: "Card 1",
+    answer: '{{cloze:Text}}<br><a href="{{SourceURL}}">source</a>',
+    question: "{{cloze:Text}}\n{{type:Text}}",
+  }],
+  css: `.card {
+  display: flex;
+  justify-content: center;
+  font-family: arial;
+  font-size: 20px;
+  color: black;
+  background-color: white;
+}
+.cloze {
+  font-weight: bold;
+  color: blue;
+}
+.nightMode .cloze {
+  color: lightblue;
+}`,
+};
+
 type DeckResult = Result<
-  Deck | undefined,
+  Deck,
+  | DeckNotFoundError
   | InvalidDeckError
   | NotFoundError
   | NotLoggedInError
@@ -66,7 +98,8 @@ const getDeck = (path: Path | undefined): Promise<DeckResult> => {
 };
 
 type NoteTypeResult = Result<
-  NoteType | undefined,
+  NoteType,
+  | NoteTypeNotFoundError
   | InvalidNoteTypeError
   | NotFoundError
   | NotLoggedInError
@@ -109,26 +142,44 @@ export const makeApkg = async (
   pages: Page[],
   init: MakeApkgInit,
 ): Promise<{ ok: true; value: Blob }> => {
-  const notes = (await Promise.all(pages.map(async (page) => {
-    const { deckRef, noteTypeRef, notes: notes_ } = parseNotes(
+  const notes = (await Promise.all(pages.map((page) => {
+    const notes = parseNotes(
       project,
       page.title,
       page.lines,
     );
 
-    const deckRes = await getDeck(deckRef);
-    if (!deckRes.ok) {
-      console.warn(`${deckRes.value.name} ${deckRes.value.message}`);
-    }
-    const deck = deckRes.ok ? (deckRes.value ?? defaultDeck) : defaultDeck;
-    const noteTypeRes = await getNoteType(noteTypeRef);
-    if (!noteTypeRes.ok) {
-      console.warn(`${noteTypeRes.value.name} ${noteTypeRes.value.message}`);
-    }
-    const noteType = noteTypeRes.ok
-      ? (noteTypeRes.value ?? defaultNoteType)
-      : defaultNoteType;
-    return notes_.map((note) => ({ deck, noteType, ...note }));
+    return Promise.all(notes.map(async (note) => {
+      const deckRes = await getDeck(note.deck);
+      if (!deckRes.ok) {
+        console.warn(`${deckRes.value.name} ${deckRes.value.message}`);
+      }
+      const deck = deckRes.ok ? (deckRes.value ?? defaultDeck) : defaultDeck;
+
+      const noteTypeRes = await getNoteType(note.noteType);
+      if (!noteTypeRes.ok) {
+        console.warn(`${noteTypeRes.value.name} ${noteTypeRes.value.message}`);
+      }
+      const noteType = noteTypeRes.ok
+        ? (noteTypeRes.value ?? defaultNoteType)
+        : defaultNoteType;
+
+      const fields = noteType.fields.map((field, i) => {
+        const name = typeof field === "string" ? field : field.name;
+        const content = note.fields.get(name);
+        return i === 0 ? content ?? note.fields.get("") ?? "" : content ?? "";
+      });
+
+      return {
+        guid: note.guid,
+        id: note.id,
+        updated: note.updated,
+        tags: note.tags,
+        fields,
+        deck,
+        noteType,
+      };
+    }));
   }))).flat();
 
   return {
