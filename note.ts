@@ -1,6 +1,7 @@
 /// <reference lib="deno.unstable" />
 
 import {
+  Block,
   convertToBlock,
   Node,
   packRows,
@@ -53,13 +54,7 @@ export const parseNotes = (
 
         // iconがある行を調べる
         const block = convertToBlock(pack);
-        const icons = block.type === "line"
-          ? block.nodes.flatMap((node) => getIcons(node))
-          : block.type === "table"
-          ? block.cells.flatMap((row) =>
-            row.flatMap((cell) => cell.flatMap((node) => getIcons(node)))
-          )
-          : [];
+        const icons = getIcons(block);
         for (const icon of icons) {
           if (icon.toLowerCase().startsWith("deck-")) {
             parsed.deckRef ??= parsePath(icon, project);
@@ -71,6 +66,14 @@ export const parseNotes = (
         break;
       }
       case "codeBlock": {
+        counter += pack.rows.length;
+        const codeBlock = convertToBlock(pack);
+        if (codeBlock.type !== "codeBlock") throw SyntaxError();
+        if (!codeBlock.fileName.includes(".note")) break;
+
+        const guid = codeBlock.fileName.match(/^(.+)\.note/)?.[1];
+        if (!guid) break;
+
         // note id は、コードブロックを構成する行の作成日時のうち、一番古いものを採用する
         const noteId = Math.min(
           ...lines.slice(counter, counter + pack.rows.length).map((line) =>
@@ -83,11 +86,7 @@ export const parseNotes = (
             line.updated
           ),
         );
-        counter += pack.rows.length;
-        const codeBlock = convertToBlock(pack);
-        if (codeBlock.type !== "codeBlock") throw SyntaxError();
-        if (!codeBlock.fileName.endsWith(".note")) break;
-        const guid = codeBlock.fileName.slice(0, -5);
+
         const prev = codes.get(guid);
         codes.set(
           guid,
@@ -138,14 +137,28 @@ const getHashTags = (node: Node): string[] => {
   }
 };
 
-const getIcons = (node: Node): string[] => {
+/** Blockに含まれるiconを出現順にすべて取り出す */
+const getIcons = (block: Block): string[] => {
+  switch (block.type) {
+    case "line":
+      return block.nodes.flatMap((node) => getIconsFromNode(node));
+    case "table":
+      return block.cells.flatMap((row) =>
+        row.flatMap((cell) => cell.flatMap((node) => getIconsFromNode(node)))
+      );
+    default:
+      return [];
+  }
+};
+
+const getIconsFromNode = (node: Node): string[] => {
   switch (node.type) {
     case "icon":
     case "strongIcon":
       return [node.path];
     case "decoration":
     case "quote":
-      return node.nodes.flatMap((node) => getIcons(node));
+      return node.nodes.flatMap((node) => getIconsFromNode(node));
     default:
       return [];
   }
