@@ -5,36 +5,21 @@ snapshot[`parseNoteType() 1`] = `
   ok: true,
   value: {
     css: "
-" +
-      ".card {
-" +
-      "  display: flex;
-" +
-      "  justify-content: center;
-" +
-      "  font-family: arial;
-" +
-      "  font-size: 20px;
-" +
-      "  color: black;
-" +
-      "  background-color: white;
-" +
-      "}
-" +
-      ".cloze {
-" +
-      "  font-weight: bold;
-" +
-      "  color: blue;
-" +
-      "}
-" +
-      ".nightMode .cloze {
-" +
-      "  color: lightblue;
-" +
-      "}",
+.card {
+  display: flex;
+  justify-content: center;
+  font-family: arial;
+  font-size: 20px;
+  color: black;
+  background-color: white;
+}
+.cloze {
+  font-weight: bold;
+  color: blue;
+}
+.nightMode .cloze {
+  color: lightblue;
+}",
     fields: [
       {
         description: "問題文",
@@ -53,15 +38,11 @@ snapshot[`parseNoteType() 1`] = `
     name: "システム英単語用穴埋め問題",
     templates: [
       {
-        answer: "
-" +
-          "{{cloze:Text}}
-" +
-          "<hr>
-" +
-          "{{Description}}
-" +
-          '<a href="{{SourceURL}}">source</a>',
+        answer: '
+{{cloze:Text}}
+<hr>
+{{Description}}
+<a href="{{SourceURL}}">source</a>',
         name: "Card 1",
         question: "
 {{cloze:Text}}
