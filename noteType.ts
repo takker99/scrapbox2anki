@@ -12,6 +12,7 @@ export interface InvalidNoteTypeError {
   name: "InvalidNoteTypeError";
   message: string;
 }
+
 /** note typeが見つからなかったときに投げるエラー */
 export interface NoteTypeNotFoundError {
   name: "NoteTypeNotFoundError";
