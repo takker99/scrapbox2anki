@@ -15,7 +15,8 @@ import {
 } from "./deps/deno-anki.ts";
 import { JSZip } from "./deps/jsZip.ts";
 import { SqlJsStatic } from "./deps/sql.ts";
-import { parseNotes, Path } from "./note.ts";
+import { Path } from "./path.ts";
+import { parseNotes } from "./note.ts";
 import { DeckNotFoundError, InvalidDeckError, parseDeck } from "./deck.ts";
 import {
   InvalidNoteTypeError,
@@ -43,21 +44,6 @@ export const defaultNoteType: NoteType = {
     answer: '{{cloze:Text}}<br><a href="{{SourceURL}}">source</a>',
     question: "{{cloze:Text}}\n{{type:Text}}",
   }],
-  css: `.card {
-  display: flex;
-  justify-content: center;
-  font-family: arial;
-  font-size: 20px;
-  color: black;
-  background-color: white;
-}
-.cloze {
-  font-weight: bold;
-  color: blue;
-}
-.nightMode .cloze {
-  color: lightblue;
-}`,
 };
 
 type DeckResult = Result<
