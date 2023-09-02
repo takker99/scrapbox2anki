@@ -1,6 +1,7 @@
 import { CodeBlock, Line, Node, Table } from "./deps/scrapbox-parser.ts";
 import { encodeTitleURI } from "./deps/scrapbox.ts";
 import { escapeHtml } from "./escapeHTML.ts";
+import { parsePath } from "./path.ts";
 
 const iUnit = "  ";
 
@@ -113,7 +114,7 @@ const convertTable = (
       ),
   );
   return `<table class="table">
-${iUnit}<caption>${table.fileName}</caption>
+${iUnit}<caption>${escapeHtml(table.fileName)}</caption>
 ${iUnit}<thead>
 ${iUnit}${iUnit}<tr>
 ${head?.map?.((row) => `${iUnit.repeat(3)}<th>${row}</th>`)?.join?.("\n") ?? ""}
@@ -147,23 +148,15 @@ const convertNode = (
     }
     case "strongIcon":
     case "icon": {
-      let src = "";
-      let href = "";
-      let alt = "";
-      switch (node.pathType) {
-        case "root":
-          href = `https://scrapbox.io${node.path}`;
-          src = `https://scrapbox.io/api/pages/${node.path}/icon`;
-          alt = node.path.replace(/^\/[^\/]+\/(.*)/, "$1");
-          break;
-        case "relative":
-          href = `https://scrapbox.io/${project}/${node.path}`;
-          src = `https://scrapbox.io/api/pages/${project}/${node.path}/icon`;
-          alt = node.path;
-          break;
-      }
-      const icon =
-        `<a class="icon" target="_blank" href="${href}"><img src="${src}" alt="${alt}" /></a>`;
+      const path = parsePath(node.path, project);
+      const src =
+        `https://scrapbox.io/api/pages/${path.project}/${path.title}/icon`;
+      const href = `https://scrapbox.io/${path.project}/${path.title}`;
+      const alt = node.path;
+
+      const icon = `<a class="icon" target="_blank" href="${
+        escapeHtml(href)
+      }"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" /></a>`;
       return node.type === "icon" ? icon : `<strong>${icon}</strong>`;
     }
     case "formula":
@@ -191,26 +184,23 @@ const convertNode = (
       return `<code class="helpfeel">? ${escapeHtml(node.text)}</code>`;
     case "googleMap":
       return `<a class="google-map" href="https://www.google.com/maps/search/${node.place}/@${node.latitude},${node.longitude},${node.zoom}z">N${node.latitude},E${node.longitude},Z${node.zoom} ${node.place}</a>`;
+    // deno-lint-ignore no-fallthrough
     case "link": {
       switch (node.pathType) {
-        case "root":
-          return `<a class="page-link" target="_blank" href="https://scrapbox.io${node.href}">${
-            escapeHtml(node.href)
-          }</a>`;
         case "relative":
-          return `<a class="page-link" target="_blank" href="https://scrapbox.io/${project}/${
-            escapeHtml(
-              encodeTitleURI(node.href),
-            )
+        case "root": {
+          const path = parsePath(node.href, project);
+          const href = `https://scrapbox.io/${path.project}/${
+            escapeHtml(encodeTitleURI(path.title))
+          }`;
+          return `<a class="page-link" target="_blank" href="${
+            escapeHtml(href)
           }">${escapeHtml(node.href)}</a>`;
+        }
         default:
           return `<a class="link" target="_blank" href="${
             escapeHtml(node.href)
-          }">${
-            escapeHtml(
-              node.content || node.href,
-            )
-          }</a>`;
+          }">${escapeHtml(node.content || node.href)}</a>`;
       }
     }
     case "hashTag":
