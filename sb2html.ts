@@ -1,5 +1,6 @@
 import { CodeBlock, Line, Node, Table } from "./deps/scrapbox-parser.ts";
 import { encodeTitleURI } from "./deps/scrapbox.ts";
+import { escapeHtml } from "./escapeHTML.ts";
 
 const iUnit = "  ";
 
@@ -225,12 +226,3 @@ const convertNode = (
       return escapeHtml(node.text);
   }
 };
-const escapeMap = {
-  "&": "&amp;",
-  "<": "&lt;",
-  ">": "&gt;",
-  '"': "&quot;",
-  "'": "&#039;",
-};
-const escapeHtml = (text: string): string =>
-  text.replace(/[&<>"']/g, (m) => escapeMap[m as "&" | "<" | ">" | '"' | "'"]);
