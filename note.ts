@@ -9,6 +9,7 @@ import {
   parseToRows,
 } from "./deps/scrapbox-parser.ts";
 import { BaseLine, encodeTitleURI } from "./deps/scrapbox.ts";
+import { detectNoteTitle } from "./detectNoteTitle.ts";
 
 /** 抽出したnote
  *
@@ -86,11 +87,10 @@ export const parseNotes = (
         counter += pack.rows.length;
         const codeBlock = convertToBlock(pack);
         if (codeBlock.type !== "codeBlock") throw SyntaxError();
-        if (!codeBlock.fileName.includes(".note")) break;
 
-        const matched = codeBlock.fileName.match(/^(.+?)\.note(?:|\.(.+))$/);
-        if (!matched) break;
-        const [, guid, fieldName = ""] = matched;
+        const noteTitle = detectNoteTitle(codeBlock.fileName);
+        if (!noteTitle) break;
+        const { guid, name } = noteTitle;
 
         const note = notes.get(guid) ??
           {
@@ -118,9 +118,9 @@ export const parseNotes = (
           ),
           note.updated,
         );
-        const content = note.fields.get(fieldName);
+        const content = note.fields.get(name);
         note.fields.set(
-          fieldName,
+          name,
           // 改行は<br>に変換する
           (content ? `${content}<br>${codeBlock.content}` : codeBlock.content)
             .replaceAll("\n", "<br>"),
