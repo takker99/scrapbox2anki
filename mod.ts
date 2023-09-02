@@ -1,9 +1,9 @@
 import {
+  BaseLine,
   getPage,
   NotFoundError,
   NotLoggedInError,
   NotMemberError,
-  Page,
   Result,
   TooLongURIError,
 } from "./deps/scrapbox.ts";
@@ -121,6 +121,11 @@ const getNoteType = (path: Path | undefined): Promise<NoteTypeResult> => {
 export interface MakeApkgInit {
   jsZip: typeof JSZip;
   sql: SqlJsStatic;
+}
+
+export interface Page {
+  title: string;
+  lines: Pick<BaseLine, "id" | "text" | "created" | "updated">[];
 }
 
 export const makeApkg = async (

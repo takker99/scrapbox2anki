@@ -50,28 +50,42 @@ declare const JSZip: typeof JSZipType;
   const prevChecked = await getChecked();
   const checked = Math.floor(new Date().getTime() / 1000);
   const pages: Page[] = [];
+  const promises: Promise<void>[] = [];
+  let terminate = false;
   const { render, dispose } = useStatusBar();
-  try {
-    for await (
-      const result of getAllUpdatedPages(project, prevChecked)
-    ) {
-      if (!result.ok) {
-        console.error(result.value);
-        alert(`${result.value.name} ${result.value.message}`);
-        return;
-      }
-      pages.push(result.value);
+  let animationId: number | undefined;
+  const updateProgress = () => {
+    if (animationId !== undefined) cancelAnimationFrame(animationId);
+    animationId = requestAnimationFrame(() => {
       render({ type: "spinner" }, {
         type: "text",
         text: `loading ${pages.length} pages updated after ${new Date(
           prevChecked * 1000,
         )}`,
       });
+    });
+  };
+  try {
+    for await (
+      const [promise] of getAllUpdatedPages(project, prevChecked)
+    ) {
+      if (terminate) break;
+      promises.push(promise.then((result) => {
+        if (!result.ok) {
+          console.error(result.value);
+          alert(`${result.value.name} ${result.value.message}`);
+          terminate = true;
+          return;
+        }
+        pages.push(result.value);
+        updateProgress();
+      }));
     }
+    await Promise.all(promises);
 
     render({ type: "spinner" }, {
       type: "text",
-      text: `creating .apkg from ${pages.length} pages`,
+      text: `creating .apkg from ${pages.length} pages...`,
     });
 
     const { value: apkg } = await makeApkg(project, pages, {
@@ -80,7 +94,7 @@ declare const JSZip: typeof JSZipType;
     });
     render({ type: "spinner" }, {
       type: "text",
-      text: "created. updating .ankirc",
+      text: "created. updating .ankirc...",
     });
     await setChecked(checked);
     render({ type: "check-circle" }, {

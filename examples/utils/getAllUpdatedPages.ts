@@ -17,10 +17,14 @@ export async function* getAllUpdatedPages(
   lastChecked: number,
   options?: BaseOptions,
 ): AsyncGenerator<
-  Result<
-    Page,
-    NotFoundError | NotLoggedInError | NotMemberError | TooLongURIError
-  >,
+  [
+    Promise<
+      Result<
+        Page,
+        NotFoundError | NotLoggedInError | NotMemberError | TooLongURIError
+      >
+    >,
+  ],
   void,
   unknown
 > {
@@ -32,13 +36,13 @@ export async function* getAllUpdatedPages(
   while (true) {
     const result = await listPages(project, { ...options, limit: 1000, skip });
     if (!result.ok) {
-      yield result;
+      yield [Promise.resolve(result)];
       return;
     }
 
     for (const page of result.value.pages) {
       if (page.updated <= lastChecked) continue;
-      yield getPage(project, page.title, { ...rest, fetch });
+      yield [getPage(project, page.title, { ...rest, fetch })];
     }
     if ((result.value.pages.pop()?.updated ?? 0) <= lastChecked) break;
     skip += 1000;
