@@ -2,15 +2,19 @@
 
 import {
   Block,
+  CodeBlock,
   convertToBlock,
+  Line,
   Node,
   packRows,
   parse,
   parseToRows,
+  Table,
 } from "./deps/scrapbox-parser.ts";
-import { BaseLine, encodeTitleURI } from "./deps/scrapbox.ts";
+import { BaseLine, encodeTitleURI, toTitleLc } from "./deps/scrapbox.ts";
 import { detectNoteTitle } from "./detectNoteTitle.ts";
 import { parsePath, Path } from "./path.ts";
+import { convert } from "./sb2html.ts";
 
 /** 抽出したnote
  *
@@ -50,7 +54,13 @@ export const parseNotes = (
     { hasTitle: true },
   );
 
-  const notes = new Map<string, Omit<Note, "deck" | "noteType">>();
+  const notes = new Map<
+    string,
+    Omit<Note, "deck" | "noteType" | "fields"> & {
+      // scrapbox記法としてparseするfieldは`true`を入れる
+      fields: Map<string, [boolean, string]>;
+    }
+  >();
   let deckRef: Path | undefined;
   let noteTypeRef: Path | undefined;
   /** 現在読んでいる`pack.rows[0]`の行番号 */
@@ -85,18 +95,21 @@ export const parseNotes = (
 
         const noteTitle = detectNoteTitle(codeBlock.fileName);
         if (!noteTitle) break;
-        const { guid, name } = noteTitle;
+        const { guid, name, isScrapboxSyntax } = noteTitle;
 
         const note = notes.get(guid) ??
           {
             guid,
             id: Infinity,
             updated: -Infinity,
-            fields: new Map<string, string>([[
+            fields: new Map<string, [boolean, string]>([[
               "SourceURL",
-              `https://scrapbox.io/${project}/${encodeTitleURI(title)}#${
-                lines[counter].id
-              }`,
+              [
+                false,
+                `https://scrapbox.io/${project}/${encodeTitleURI(title)}#${
+                  lines[counter].id
+                }`,
+              ],
             ]]),
           };
 
@@ -113,12 +126,14 @@ export const parseNotes = (
           ),
           note.updated,
         );
-        const content = note.fields.get(name);
+        const [isSyntax, content] = note.fields.get(name) ?? [true, ""];
         note.fields.set(
           name,
-          // 改行は<br>に変換する
-          (content ? `${content}<br>${codeBlock.content}` : codeBlock.content)
-            .replaceAll("\n", "<br>"),
+          [
+            isSyntax && isScrapboxSyntax,
+
+            content ? `${content}\n${codeBlock.content}` : codeBlock.content,
+          ],
         );
 
         notes.set(guid, note);
@@ -127,30 +142,35 @@ export const parseNotes = (
     }
   }
 
-  return [...notes.values()].map((note) => ({
-    ...note,
-    deck: deckRef,
-    noteType: noteTypeRef,
-    // textをさらにparseして、hashtagを取り出す
-    tags: parse(note.fields.get("") ?? "").flatMap((block) => {
-      if (block.type !== "line") return [];
-      return block.nodes.flatMap(
-        (node) => getHashTags(node),
-      );
-    }),
-  }));
-};
+  return [...notes.values()].map(({ fields: fieldsUnparsed, ...note }) => {
+    // 構文解析しつつ、tagsを取り出す
+    const tags: string[] = [];
+    const dupCheck = new Set<string>();
+    const crawlTag = (tag: string) => {
+      const tagLc = toTitleLc(tag);
+      if (dupCheck.has(tagLc)) return;
+      dupCheck.add(tagLc);
+      tags.push(tag);
+    };
+    const fields = new Map<string, string>();
 
-const getHashTags = (node: Node): string[] => {
-  switch (node.type) {
-    case "hashTag":
-      return [node.href];
-    case "decoration":
-    case "quote":
-      return node.nodes.flatMap((node) => getHashTags(node));
-    default:
-      return [];
-  }
+    for (
+      const [guid, [isScrapboxSyntax, content]] of fieldsUnparsed.entries()
+    ) {
+      if (!isScrapboxSyntax) {
+        fields.set(guid, content);
+        continue;
+      }
+      const html = convert(
+        parse(content, { hasTitle: false }) as (Table | CodeBlock | Line)[],
+        project,
+        crawlTag,
+      );
+      fields.set(guid, html);
+    }
+
+    return ({ ...note, deck: deckRef, noteType: noteTypeRef, fields, tags });
+  });
 };
 
 /** Blockに含まれるiconを出現順にすべて取り出す */
