@@ -44,21 +44,6 @@ export const defaultNoteType: NoteType = {
     answer: '{{cloze:Text}}<br><a href="{{SourceURL}}">source</a>',
     question: "{{cloze:Text}}\n{{type:Text}}",
   }],
-  css: `.card {
-  display: flex;
-  justify-content: center;
-  font-family: arial;
-  font-size: 20px;
-  color: black;
-  background-color: white;
-}
-.cloze {
-  font-weight: bold;
-  color: blue;
-}
-.nightMode .cloze {
-  color: lightblue;
-}`,
 };
 
 type DeckResult = Result<
