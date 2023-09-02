@@ -46,7 +46,7 @@ export interface Note {
 export const parseNotes = (
   project: string,
   title: string,
-  lines: BaseLine[],
+  lines: Pick<BaseLine, "id" | "text" | "created" | "updated">[],
 ): Note[] => {
   if (lines.length === 0) return [];
   const packs = packRows(
