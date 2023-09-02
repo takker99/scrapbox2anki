@@ -15,7 +15,8 @@ import {
 } from "./deps/deno-anki.ts";
 import { JSZip } from "./deps/jsZip.ts";
 import { SqlJsStatic } from "./deps/sql.ts";
-import { parseNotes, Path } from "./note.ts";
+import { Path } from "./path.ts";
+import { parseNotes } from "./note.ts";
 import { DeckNotFoundError, InvalidDeckError, parseDeck } from "./deck.ts";
 import {
   InvalidNoteTypeError,

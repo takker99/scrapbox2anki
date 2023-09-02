@@ -10,6 +10,7 @@ import {
 } from "./deps/scrapbox-parser.ts";
 import { BaseLine, encodeTitleURI } from "./deps/scrapbox.ts";
 import { detectNoteTitle } from "./detectNoteTitle.ts";
+import { parsePath, Path } from "./path.ts";
 
 /** 抽出したnote
  *
@@ -36,12 +37,6 @@ export interface Note {
    * unnamed fieldは`""`をキーとして格納する
    */
   fields: Map<string, string>;
-}
-
-/** scrapboxのページを一意に特定するパス */
-export interface Path {
-  project: string;
-  title: string;
 }
 
 export const parseNotes = (
@@ -183,11 +178,4 @@ const getIconsFromNode = (node: Node): string[] => {
     default:
       return [];
   }
-};
-
-const parsePath = (path: string, defaultProject: string): Path => {
-  const [, project, title] = path.match(/^\/([\w\-]+)\/(.+)$/) ?? [];
-  return project && title
-    ? { project, title }
-    : { project: defaultProject, title: path };
 };
