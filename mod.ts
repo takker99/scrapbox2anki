@@ -17,10 +17,16 @@ import { SqlJsStatic } from "./deps/sql.ts";
 import { Path } from "./path.ts";
 import { Page } from "./type.ts";
 import { parseNotes } from "./note.ts";
-import { DeckNotFoundError, InvalidDeckError, parseDeck } from "./deck.ts";
+import {
+  DeckNotFoundError,
+  DeckSyntaxError,
+  InvalidDeckError,
+  parseDeck,
+} from "./deck.ts";
 import {
   InvalidNoteTypeError,
   NoteTypeNotFoundError,
+  NoteTypeSyntaxError,
   parseNoteType,
 } from "./noteType.ts";
 
@@ -49,6 +55,7 @@ export const defaultNoteType: NoteType = {
 type DeckResult = Result<
   Deck,
   | DeckNotFoundError
+  | DeckSyntaxError
   | InvalidDeckError
   | NotFoundError
   | NotLoggedInError
@@ -86,6 +93,7 @@ const getDeck = (path: Path | undefined): Promise<DeckResult> => {
 type NoteTypeResult = Result<
   NoteType,
   | NoteTypeNotFoundError
+  | NoteTypeSyntaxError
   | InvalidNoteTypeError
   | NotFoundError
   | NotLoggedInError
