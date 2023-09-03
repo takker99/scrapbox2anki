@@ -69,7 +69,7 @@ snapshot[`parseNoteType() > splitted 1`] = `
   ok: false,
   value: {
     message: "Expected double-quoted property name in JSON at position 121",
-    name: "InvalidNoteTypeError",
+    name: "NoteTypeSyntaxError",
   },
 }
 `;

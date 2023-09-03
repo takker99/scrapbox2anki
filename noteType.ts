@@ -12,7 +12,11 @@ export interface InvalidNoteTypeError {
   name: "InvalidNoteTypeError";
   message: string;
 }
-
+/** note typeのJSONに文法エラーがあったときに投げるエラー */
+export interface NoteTypeSyntaxError {
+  name: "NoteTypeSyntaxError";
+  message: string;
+}
 /** note typeが見つからなかったときに投げるエラー */
 export interface NoteTypeNotFoundError {
   name: "NoteTypeNotFoundError";
@@ -26,7 +30,10 @@ export interface NoteTypeNotFoundError {
  */
 export const parseNoteType = (
   page: Page,
-): Result<NoteType, NoteTypeNotFoundError | InvalidNoteTypeError> => {
+): Result<
+  NoteType,
+  NoteTypeNotFoundError | InvalidNoteTypeError | NoteTypeSyntaxError
+> => {
   if (page.lines.length === 0) {
     return {
       ok: false,
@@ -281,7 +288,7 @@ export const parseNoteType = (
     if (e instanceof SyntaxError) {
       return {
         ok: false,
-        value: makeError(e.message),
+        value: { name: "NoteTypeSyntaxError", message: e.message },
       };
     }
     throw e;

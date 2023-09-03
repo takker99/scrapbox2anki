@@ -12,6 +12,11 @@ export interface InvalidDeckError {
   name: "InvalidDeckError";
   message: string;
 }
+/** deckのJSONに文法エラーがあったときに投げるエラー */
+export interface DeckSyntaxError {
+  name: "DeckSyntaxError";
+  message: string;
+}
 /** deckが見つからなかったときに投げるエラー */
 export interface DeckNotFoundError {
   name: "DeckNotFoundError";
@@ -25,7 +30,7 @@ export interface DeckNotFoundError {
  */
 export const parseDeck = (
   page: Page,
-): Result<Deck, InvalidDeckError | DeckNotFoundError> => {
+): Result<Deck, DeckSyntaxError | InvalidDeckError | DeckNotFoundError> => {
   if (page.lines.length === 0) {
     return {
       ok: false,
@@ -120,7 +125,7 @@ export const parseDeck = (
     if (e instanceof SyntaxError) {
       return {
         ok: false,
-        value: makeError(e.message),
+        value: { name: "DeckSyntaxError", message: e.message },
       };
     }
     throw e;
