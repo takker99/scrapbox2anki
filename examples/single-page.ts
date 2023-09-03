@@ -3,14 +3,14 @@
 /// <reference no-default-lib="true" />
 /// <reference lib="esnext" />
 // <reference lib="dom" />
-import { makeApkg } from "../mod.ts";
+import { confirmThenCreate } from "./utils/confirmThenCreate.ts";
 import { getPage } from "../deps/scrapbox.ts";
 import type { JSZip as JSZipType } from "../deps/jsZip.ts";
 import { Scrapbox, useStatusBar } from "../deps/scrapbox-userscript.ts";
 declare const scrapbox: Scrapbox;
 declare const JSZip: typeof JSZipType;
 
-(async () => {
+await (async () => {
   if (scrapbox?.Layout !== "page") return;
   const { sql } = await import("./utils/prepare.ts");
   const project = scrapbox.Project.name;
@@ -30,12 +30,16 @@ declare const JSZip: typeof JSZipType;
       type: "text",
       text: `creating .apkg from /${project}/${scrapbox.Page.title}`,
     });
-    const { value: apkg } = await makeApkg(project, [
-      result.value,
-    ], { jsZip: JSZip, sql });
+
+    const apkg = await confirmThenCreate(project, [result.value], {
+      JSZip,
+      sql,
+    });
+    if (!apkg) return;
     const url = URL.createObjectURL(
       new Blob([apkg], { type: "application/octet-stream" }),
     );
+
     render({ type: "check-circle" }, {
       type: "text",
       text: "created.",
