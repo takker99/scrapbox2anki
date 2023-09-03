@@ -1,5 +1,5 @@
 import type { Result } from "./deps/scrapbox.ts";
-import type { BaseLine } from "./deps/scrapbox.ts";
+import { Page } from "./type.ts";
 import type { Deck } from "./deps/deno-anki.ts";
 import {
   convertToBlock,
@@ -18,15 +18,15 @@ export interface DeckNotFoundError {
   message: string;
 }
 
-/** ページ本文からDeckを抽出する
+/** ページからDeckを抽出する
  *
- * @param lines メタデータつきページ本文
+ * @param page ページデータ
  * @return 解析結果
  */
 export const parseDeck = (
-  lines: BaseLine[],
+  page: Page,
 ): Result<Deck, InvalidDeckError | DeckNotFoundError> => {
-  if (lines.length === 0) {
+  if (page.lines.length === 0) {
     return {
       ok: false,
       value: {
@@ -36,14 +36,12 @@ export const parseDeck = (
     };
   }
   const packs = packRows(
-    parseToRows(lines.map((line) => line.text).join("\n")),
+    parseToRows(page.lines.map((line) => line.text).join("\n")),
     { hasTitle: true },
   );
 
   /** json text of deck setting */
   let json = "";
-  /** the updated time of the deck (UNIX time) */
-  let updated = 0;
   /** 現在読んでいる`pack.rows[0]`の行番号 */
   let counter = 0;
   const fileName = "deck.json";
@@ -59,12 +57,6 @@ export const parseDeck = (
         counter += pack.rows.length;
         break;
       case "codeBlock": {
-        updated = Math.max(
-          ...lines.slice(counter, counter + pack.rows.length).map((line) =>
-            line.updated
-          ),
-          updated,
-        );
         counter += pack.rows.length;
 
         const block = convertToBlock(pack);
@@ -118,7 +110,7 @@ export const parseDeck = (
       value: {
         id: deck.id,
         name: deck.name,
-        updated,
+        updated: page.updated,
         ...("description" in deck
           ? { description: deck.description as string }
           : {}),

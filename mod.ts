@@ -1,5 +1,4 @@
 import {
-  BaseLine,
   getPage,
   NotFoundError,
   NotLoggedInError,
@@ -16,6 +15,7 @@ import {
 import { JSZip } from "./deps/jsZip.ts";
 import { SqlJsStatic } from "./deps/sql.ts";
 import { Path } from "./path.ts";
+import { Page } from "./type.ts";
 import { parseNotes } from "./note.ts";
 import { DeckNotFoundError, InvalidDeckError, parseDeck } from "./deck.ts";
 import {
@@ -77,7 +77,7 @@ const getDeck = (path: Path | undefined): Promise<DeckResult> => {
   const promise = (async () => {
     const result = await getPage(path.project, path.title);
     if (!result.ok) return result;
-    return parseDeck(result.value.lines);
+    return parseDeck(result.value);
   })();
   decks.set(toKey(path), promise);
   return promise;
@@ -112,7 +112,7 @@ const getNoteType = (path: Path | undefined): Promise<NoteTypeResult> => {
   const promise = (async () => {
     const result = await getPage(path.project, path.title);
     if (!result.ok) return result;
-    return parseNoteType(result.value.lines);
+    return parseNoteType(result.value);
   })();
   noteTypes.set(toKey(path), promise);
   return promise;
@@ -121,11 +121,6 @@ const getNoteType = (path: Path | undefined): Promise<NoteTypeResult> => {
 export interface MakeApkgInit {
   jsZip: typeof JSZip;
   sql: SqlJsStatic;
-}
-
-export interface Page {
-  title: string;
-  lines: Pick<BaseLine, "id" | "text" | "created" | "updated">[];
 }
 
 export const makeApkg = async (
