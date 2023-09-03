@@ -42,7 +42,6 @@ export const defaultNoteType: NoteType = {
   id: 1677417085373,
   fields: [
     { name: "Text", description: "問題文" },
-    { name: "SourceURL", description: "問題の取得元URL" },
   ],
   isCloze: true,
   templates: [{
