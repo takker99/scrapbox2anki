@@ -122,11 +122,11 @@ export const makeNotes = async (
       const note = parsedNotes[i];
       if (!note.deck || !note.noteType) {
         if (!note.deck) {
-          console.warn(`Deck is specified in ${key}`);
+          console.warn(`Deck is not specified in ${key}`);
           warning.deckNotSpecified = true;
         }
         if (!note.noteType) {
-          console.warn(`Note type is specified in ${key}`);
+          console.warn(`Note type is not specified in ${key}`);
           warning.noteTypeNotSpecified = true;
         }
         warning.skipped = parsedNotes.length - i;
