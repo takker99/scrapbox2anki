@@ -1,5 +1,5 @@
 import type { Result } from "./deps/scrapbox.ts";
-import { BaseLine } from "./deps/scrapbox.ts";
+import { Page } from "./type.ts";
 import type { Field, NoteType, Template } from "./deps/deno-anki.ts";
 import {
   convertToBlock,
@@ -19,15 +19,15 @@ export interface NoteTypeNotFoundError {
   message: string;
 }
 
-/** ページ本文からNote Typeを抽出する
+/** ページからNote Typeを抽出する
  *
- * @param lines メタデータつきページ本文
+ * @param page ページデータ
  * @return 解析結果
  */
 export const parseNoteType = (
-  lines: BaseLine[],
+  page: Page,
 ): Result<NoteType, NoteTypeNotFoundError | InvalidNoteTypeError> => {
-  if (lines.length === 0) {
+  if (page.lines.length === 0) {
     return {
       ok: false,
       value: {
@@ -37,12 +37,10 @@ export const parseNoteType = (
     };
   }
   const packs = packRows(
-    parseToRows(lines.map((line) => line.text).join("\n")),
+    parseToRows(page.lines.map((line) => line.text).join("\n")),
     { hasTitle: true },
   );
 
-  /** the updated time of the deck (UNIX time) */
-  let updated = 0;
   /** 現在読んでいる`pack.rows[0]`の行番号 */
   let counter = 0;
 
@@ -70,12 +68,6 @@ export const parseNoteType = (
         counter += pack.rows.length;
         break;
       case "codeBlock": {
-        updated = Math.max(
-          ...lines.slice(counter, counter + pack.rows.length).map((line) =>
-            line.updated
-          ),
-          updated,
-        );
         counter += pack.rows.length;
 
         const block = convertToBlock(pack);
@@ -264,7 +256,7 @@ export const parseNoteType = (
     const noteType_: NoteType = {
       name: noteType.name,
       id: noteType.id,
-      updated,
+      updated: page.updated,
       fields,
       templates,
     };

@@ -11,7 +11,8 @@ import {
   parseToRows,
   Table,
 } from "./deps/scrapbox-parser.ts";
-import { BaseLine, encodeTitleURI, toTitleLc } from "./deps/scrapbox.ts";
+import { encodeTitleURI, toTitleLc } from "./deps/scrapbox.ts";
+import { Line as BaseLine } from "./type.ts";
 import { detectNoteTitle } from "./detectNoteTitle.ts";
 import { parsePath, Path } from "./path.ts";
 import { convert } from "./sb2html.ts";
@@ -46,7 +47,7 @@ export interface Note {
 export const parseNotes = (
   project: string,
   title: string,
-  lines: Pick<BaseLine, "id" | "text" | "created" | "updated">[],
+  lines: BaseLine[],
 ): Note[] => {
   if (lines.length === 0) return [];
   const packs = packRows(

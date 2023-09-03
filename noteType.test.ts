@@ -2,8 +2,18 @@
 
 import { parseNoteType } from "./noteType.ts";
 import { assertSnapshot } from "./deps/testing.ts";
-import lines from "./sample-noteType1.json" assert { type: "json" };
+import found from "./sample-noteType1.json" assert { type: "json" };
+import notFound from "./sample-deck1.json" assert { type: "json" };
+import splitted from "./sample-page1.json" assert { type: "json" };
 
 Deno.test("parseNoteType()", async (t) => {
-  await assertSnapshot(t, parseNoteType(lines));
+  await t.step("not found", async (t) => {
+    await assertSnapshot(t, parseNoteType(notFound));
+  });
+  await t.step("found", async (t) => {
+    await assertSnapshot(t, parseNoteType(found));
+  });
+  await t.step("splitted", async (t) => {
+    await assertSnapshot(t, parseNoteType(splitted));
+  });
 });

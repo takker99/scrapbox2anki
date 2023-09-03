@@ -1,6 +1,16 @@
 export const snapshot = {};
 
-snapshot[`parseNoteType() 1`] = `
+snapshot[`parseNoteType() > not found 1`] = `
+{
+  ok: false,
+  value: {
+    message: "No note type settings found in the page.",
+    name: "NoteTypeNotFoundError",
+  },
+}
+`;
+
+snapshot[`parseNoteType() > found 1`] = `
 {
   ok: true,
   value: {
@@ -50,6 +60,16 @@ snapshot[`parseNoteType() 1`] = `
       },
     ],
     updated: 1693465105,
+  },
+}
+`;
+
+snapshot[`parseNoteType() > splitted 1`] = `
+{
+  ok: false,
+  value: {
+    message: "Expected double-quoted property name in JSON at position 121",
+    name: "InvalidNoteTypeError",
   },
 }
 `;

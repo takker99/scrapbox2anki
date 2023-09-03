@@ -17,7 +17,7 @@ snapshot[`parseDeck() > found 1`] = `
     description: "システム英単語系の問題集",
     id: 44845749858349580,
     name: "system-english",
-    updated: 1687746093,
+    updated: 1693541873,
   },
 }
 `;
