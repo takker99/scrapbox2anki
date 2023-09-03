@@ -23,6 +23,14 @@ export interface NoteTypeNotFoundError {
   message: string;
 }
 
+/** scrapbox2ankiで自動生成するfields
+ *
+ * これらは以下の配列の順に末尾に自動挿入される。
+ */
+export const reservedFields: Field[] = [
+  { name: "SourceURL", description: "問題の取得元URL" },
+];
+
 /** ページからNote Typeを抽出する
  *
  * @param page ページデータ
@@ -159,13 +167,15 @@ export const parseNoteType = (
     }
     // verify fields
     const fields: Field[] = [];
-    for (const field of noteType.fields) {
+    for (const fld of noteType.fields) {
+      const field: unknown = fld;
       switch (typeof field) {
         case "string":
+          if (reservedFields.some(({ name }) => field === name)) break;
           fields.push({ name: field });
           break;
         case "object": {
-          if (!("name" in field)) {
+          if (field == null || !("name" in field)) {
             return {
               ok: false,
               value: makeError("Each field object must have `name`."),
@@ -177,6 +187,7 @@ export const parseNoteType = (
               value: makeError("The name of a field must be a string."),
             };
           }
+          if (reservedFields.some(({ name }) => field.name === name)) break;
           const item: Field = { name: field.name };
 
           if ("description" in field) {
@@ -236,6 +247,7 @@ export const parseNoteType = (
           };
       }
     }
+    fields.push(...reservedFields);
     // verify templates
     const templates: Template[] = [];
     if (templateMap.size === 0) {
