@@ -23,6 +23,11 @@ export interface NoteTypeNotFoundError {
   message: string;
 }
 
+export type NoteTypeError =
+  | NoteTypeNotFoundError
+  | InvalidNoteTypeError
+  | NoteTypeSyntaxError;
+
 /** scrapbox2ankiで自動生成するfields
  *
  * これらは以下の配列の順に末尾に自動挿入される。
@@ -38,10 +43,7 @@ export const reservedFields: Field[] = [
  */
 export const parseNoteType = (
   page: Page,
-): Result<
-  NoteType,
-  NoteTypeNotFoundError | InvalidNoteTypeError | NoteTypeSyntaxError
-> => {
+): Result<NoteType, NoteTypeError> => {
   if (page.lines.length === 0) {
     return {
       ok: false,

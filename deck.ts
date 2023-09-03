@@ -23,6 +23,8 @@ export interface DeckNotFoundError {
   message: string;
 }
 
+export type DeckError = DeckSyntaxError | InvalidDeckError | DeckNotFoundError;
+
 /** ページからDeckを抽出する
  *
  * @param page ページデータ
@@ -30,7 +32,7 @@ export interface DeckNotFoundError {
  */
 export const parseDeck = (
   page: Page,
-): Result<Deck, DeckSyntaxError | InvalidDeckError | DeckNotFoundError> => {
+): Result<Deck, DeckError> => {
   if (page.lines.length === 0) {
     return {
       ok: false,

@@ -6,61 +6,21 @@ import {
   Result,
   TooLongURIError,
 } from "./deps/scrapbox.ts";
-import {
-  Deck,
-  makeCollection,
-  makePackage,
-  NoteType,
-} from "./deps/deno-anki.ts";
-import { JSZip } from "./deps/jsZip.ts";
-import { SqlJsStatic } from "./deps/sql.ts";
+import { Deck, Note, NoteType } from "./deps/deno-anki.ts";
 import { Path } from "./path.ts";
 import { Page } from "./type.ts";
 import { parseNotes } from "./note.ts";
-import {
-  DeckNotFoundError,
-  DeckSyntaxError,
-  InvalidDeckError,
-  parseDeck,
-} from "./deck.ts";
-import {
-  InvalidNoteTypeError,
-  NoteTypeNotFoundError,
-  NoteTypeSyntaxError,
-  parseNoteType,
-} from "./noteType.ts";
+import { DeckError, parseDeck } from "./deck.ts";
+import { NoteTypeError, parseNoteType } from "./noteType.ts";
 
-/** 既定のdeck */
-const defaultDeck: Deck = {
-  name: "default",
-  id: 1,
-};
-
-/** 既定のNote type */
-export const defaultNoteType: NoteType = {
-  name: "Basic (Cloze)",
-  id: 1677417085373,
-  fields: [
-    { name: "Text", description: "問題文" },
-  ],
-  isCloze: true,
-  templates: [{
-    name: "Card 1",
-    answer: '{{cloze:Text}}<br><a href="{{SourceURL}}">source</a>',
-    question: "{{cloze:Text}}\n{{type:Text}}",
-  }],
-};
-
-type DeckResult = Result<
-  Deck,
-  | DeckNotFoundError
-  | DeckSyntaxError
-  | InvalidDeckError
+export type NetworkError =
   | NotFoundError
   | NotLoggedInError
   | NotMemberError
-  | TooLongURIError
->;
+  | TooLongURIError;
+
+export type DeckResult = Result<Deck, DeckError | NetworkError>;
+export type { DeckError, NoteTypeError };
 
 /** 読み込んだdecksのcache
  *
@@ -71,11 +31,8 @@ const decks = new Map<Key, Promise<DeckResult>>();
 /** 指定されたdeckをcacheから読み込む
  *
  * cacheになければfetchする
- *
- * `path`が`undefined`のときはdefaultのdeckを返す
  */
-const getDeck = (path: Path | undefined): Promise<DeckResult> => {
-  if (!path) return Promise.resolve({ ok: true, value: defaultDeck });
+const getDeck = (path: Path): Promise<DeckResult> => {
   const deck = decks.get(toKey(path));
   // すでにfetch中のがあれば、それを待つ
   if (deck) return deck;
@@ -89,16 +46,7 @@ const getDeck = (path: Path | undefined): Promise<DeckResult> => {
   return promise;
 };
 
-type NoteTypeResult = Result<
-  NoteType,
-  | NoteTypeNotFoundError
-  | NoteTypeSyntaxError
-  | InvalidNoteTypeError
-  | NotFoundError
-  | NotLoggedInError
-  | NotMemberError
-  | TooLongURIError
->;
+type NoteTypeResult = Result<NoteType, NoteTypeError | NetworkError>;
 
 /** 読み込んだnote typesのcache
  *
@@ -110,8 +58,7 @@ const noteTypes = new Map<Key, Promise<NoteTypeResult>>();
  *
  * cacheになければfetchする
  */
-const getNoteType = (path: Path | undefined): Promise<NoteTypeResult> => {
-  if (!path) return Promise.resolve({ ok: true, value: defaultNoteType });
+const getNoteType = (path: Path): Promise<NoteTypeResult> => {
   const noteType = noteTypes.get(toKey(path));
   // すでにfetch中のがあれば、それを待つ
   if (noteType) return noteType;
@@ -125,45 +72,93 @@ const getNoteType = (path: Path | undefined): Promise<NoteTypeResult> => {
   return promise;
 };
 
-export interface MakeApkgInit {
-  jsZip: typeof JSZip;
-  sql: SqlJsStatic;
+export interface Warning {
+  /** deckが指定されていなかった */
+  deckNotSpecified: boolean;
+
+  /** note typeが指定されていなかった */
+  noteTypeNotSpecified: boolean;
+
+  /** 読み込みを飛ばしたnotes */
+  skipped: number;
 }
 
-export const makeApkg = async (
+export interface MakeNoteResult {
+  /** 与えられたページから抽出されたnotes */
+  notes: Note[];
+
+  /** 各ページ毎に集計した警告 */
+  warnings: Map<`/${string}/${string}`, Warning>;
+
+  /** deckやnote typeの読み込みエラー */
+  errors: Map<Key, DeckError | NoteTypeError | NetworkError>;
+}
+
+/** ページを解析してAnkiのnotesを作る
+ *
+ * @param project ページが所属するproject name
+ * @param pages 解析したいページ
+ * @return 解析結果
+ */
+export const makeNotes = async (
   project: string,
   pages: Page[],
-  init: MakeApkgInit,
-): Promise<{ ok: true; value: Blob }> => {
-  const notes = (await Promise.all(pages.map((page) => {
-    const notes = parseNotes(
+): Promise<MakeNoteResult> => {
+  const warnings = new Map<Key, Warning>();
+  const errors = new Map<Key, DeckError | NoteTypeError | NetworkError>();
+  const notes: Note[] = [];
+
+  for (const page of pages) {
+    const key = toKey({ project, title: page.title });
+    const warning: Warning = warnings.get(key) ??
+      { deckNotSpecified: false, noteTypeNotSpecified: false, skipped: 0 };
+    const parsedNotes = parseNotes(
       project,
       page.title,
       page.lines,
     );
 
-    return Promise.all(notes.map(async (note) => {
+    for (let i = 0; i < parsedNotes.length; i++) {
+      const note = parsedNotes[i];
+      if (!note.deck || !note.noteType) {
+        if (!note.deck) {
+          console.warn(`Deck is not specified in ${key}`);
+          warning.deckNotSpecified = true;
+        }
+        if (!note.noteType) {
+          console.warn(`Note type is not specified in ${key}`);
+          warning.noteTypeNotSpecified = true;
+        }
+        warning.skipped = parsedNotes.length - i;
+        break;
+      }
       const deckRes = await getDeck(note.deck);
       if (!deckRes.ok) {
         console.warn(`${deckRes.value.name} ${deckRes.value.message}`);
+        errors.set(toKey(note.deck), deckRes.value);
+        warning.skipped = parsedNotes.length - i;
+        break;
       }
-      const deck = deckRes.ok ? (deckRes.value ?? defaultDeck) : defaultDeck;
-
-      const noteTypeRes = await getNoteType(note.noteType);
+      const deck = deckRes.value;
+      const noteTypeRes = await getNoteType(note.noteType!);
       if (!noteTypeRes.ok) {
-        console.warn(`${noteTypeRes.value.name} ${noteTypeRes.value.message}`);
+        console.warn(
+          `${noteTypeRes.value.name} ${noteTypeRes.value.message}`,
+        );
+        errors.set(toKey(note.noteType), noteTypeRes.value);
+        warning.skipped = parsedNotes.length - i;
+        break;
       }
-      const noteType = noteTypeRes.ok
-        ? (noteTypeRes.value ?? defaultNoteType)
-        : defaultNoteType;
+      const noteType = noteTypeRes.value;
 
+      // unnamed fieldを先頭に持っていく
       const fields = noteType.fields.map((field, i) => {
         const name = typeof field === "string" ? field : field.name;
         const content = note.fields.get(name);
         return i === 0 ? content ?? note.fields.get("") ?? "" : content ?? "";
       });
 
-      return {
+      notes.push({
         guid: note.guid,
         id: note.id,
         updated: note.updated,
@@ -171,19 +166,17 @@ export const makeApkg = async (
         fields,
         deck,
         noteType,
-      };
-    }));
-  }))).flat();
+      });
+    }
+    if (
+      warning.deckNotSpecified || warning.noteTypeNotSpecified ||
+      warning.skipped > 0
+    ) {
+      warnings.set(key, warning);
+    }
+  }
 
-  return {
-    ok: true,
-    value: await makePackage(
-      makeCollection(notes, init.sql),
-      {},
-      //@ts-ignore 外部moduleが使っているJSZipのversionの食い違いで、どうしても型エラーが生じてしまう
-      init.jsZip,
-    ),
-  };
+  return { notes, warnings, errors };
 };
 
 type Key = `/${string}/${string}`;

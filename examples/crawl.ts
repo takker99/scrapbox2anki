@@ -3,15 +3,15 @@
 /// <reference no-default-lib="true" />
 /// <reference lib="esnext" />
 // <reference lib="dom" />
-import { makeApkg } from "../mod.ts";
 import { getCodeBlock, Page } from "../deps/scrapbox.ts";
 import type { JSZip as JSZipType } from "../deps/jsZip.ts";
 import { getAllUpdatedPages } from "./utils/getAllUpdatedPages.ts";
+import { confirmThenCreate } from "./utils/confirmThenCreate.ts";
 import { patch, Scrapbox, useStatusBar } from "../deps/scrapbox-userscript.ts";
 declare const scrapbox: Scrapbox;
 declare const JSZip: typeof JSZipType;
 
-(async () => {
+await (async () => {
   if (!scrapbox) return;
   const { sql } = await import("./utils/prepare.ts");
 
@@ -83,14 +83,12 @@ declare const JSZip: typeof JSZipType;
     }
     await Promise.all(promises);
 
+    const apkg = await confirmThenCreate(project, pages, { JSZip, sql });
+    if (!apkg) return;
+
     render({ type: "spinner" }, {
       type: "text",
       text: `creating .apkg from ${pages.length} pages...`,
-    });
-
-    const { value: apkg } = await makeApkg(project, pages, {
-      jsZip: JSZip,
-      sql,
     });
     render({ type: "spinner" }, {
       type: "text",
