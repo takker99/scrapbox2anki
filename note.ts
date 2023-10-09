@@ -155,6 +155,10 @@ export const parseNotes = (
     };
     const fields = new Map<string, string>();
 
+    // 先にnote取得元project nameとpage titleをtagに入れておく
+    crawlTag(project);
+    crawlTag(title);
+
     for (
       const [guid, [isScrapboxSyntax, content]] of fieldsUnparsed.entries()
     ) {
