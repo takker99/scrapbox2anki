@@ -121,12 +121,14 @@ ${head?.map?.((row) => `${iUnit.repeat(3)}<th>${row}</th>`)?.join?.("\n") ?? ""}
 ${iUnit}${iUnit}</tr>
 ${iUnit}</thead>
 ${iUnit}<tbody>
-${lines?.map?.(
-    (line) =>
-      `${iUnit}${iUnit}<tr>\n${
-        line.map((row) => `${iUnit.repeat(3)}<td>${row}</td>`).join("\n")
-      }\n${iUnit}${iUnit}</tr>`,
-  )?.join?.("\n")}
+${
+    lines?.map?.(
+      (line) =>
+        `${iUnit}${iUnit}<tr>\n${
+          line.map((row) => `${iUnit.repeat(3)}<td>${row}</td>`).join("\n")
+        }\n${iUnit}${iUnit}</tr>`,
+    )?.join?.("\n")
+  }
 ${iUnit}</tbody>
 </table>`;
 };

@@ -20,6 +20,7 @@ snapshot[`parseNotes 1`] = `
       title: "NoteType-穴埋めサンプル",
     },
     tags: [
+      "takker-dist",
       "ダブルスタンダード",
     ],
     updated: 1676880688000,
@@ -40,7 +41,10 @@ snapshot[`parseNotes 1`] = `
       project: "takker-dist",
       title: "NoteType-穴埋めサンプル",
     },
-    tags: [],
+    tags: [
+      "takker-dist",
+      "ダブルスタンダード",
+    ],
     updated: 1681036225000,
   },
   {
@@ -58,7 +62,10 @@ snapshot[`parseNotes 1`] = `
       project: "takker-dist",
       title: "NoteType-穴埋めサンプル",
     },
-    tags: [],
+    tags: [
+      "takker-dist",
+      "ダブルスタンダード",
+    ],
     updated: 1676878940000,
   },
   {
@@ -76,7 +83,10 @@ snapshot[`parseNotes 1`] = `
       project: "takker-dist",
       title: "NoteType-穴埋めサンプル",
     },
-    tags: [],
+    tags: [
+      "takker-dist",
+      "ダブルスタンダード",
+    ],
     updated: 1676880566000,
   },
   {
@@ -94,7 +104,10 @@ snapshot[`parseNotes 1`] = `
       project: "takker-dist",
       title: "NoteType-穴埋めサンプル",
     },
-    tags: [],
+    tags: [
+      "takker-dist",
+      "ダブルスタンダード",
+    ],
     updated: 1676878946000,
   },
   {
@@ -112,7 +125,10 @@ snapshot[`parseNotes 1`] = `
       project: "takker-dist",
       title: "NoteType-穴埋めサンプル",
     },
-    tags: [],
+    tags: [
+      "takker-dist",
+      "ダブルスタンダード",
+    ],
     updated: 1677320293000,
   },
 ]
