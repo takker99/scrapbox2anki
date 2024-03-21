@@ -1,14 +1,6 @@
 /// <reference lib="deno.unstable" />
 
-import {
-  CodeBlock,
-  convertToBlock,
-  Line,
-  packRows,
-  parse,
-  parseToRows,
-  Table,
-} from "./deps/scrapbox-parser.ts";
+import { CodeBlock, Line, parse, Table } from "./deps/scrapbox-parser.ts";
 import { encodeTitleURI, toTitleLc } from "./deps/scrapbox.ts";
 import { Line as BaseLine } from "./type.ts";
 import { detectNoteTitle } from "./detectNoteTitle.ts";
@@ -58,8 +50,8 @@ export const parseNotes = (
 ): [Note[], Map<string, URL>] => {
   const mediaURLs = new Map<string, URL>();
   if (lines.length === 0) return [[], mediaURLs];
-  const packs = packRows(
-    parseToRows(lines.map((line) => line.text).join("\n")),
+  const blocks = parse(
+    lines.map((line) => line.text).join("\n"),
     { hasTitle: true },
   );
 
@@ -74,18 +66,17 @@ export const parseNotes = (
   let noteTypeRef: Path | undefined;
   /** 現在読んでいる`pack.rows[0]`の行番号 */
   let counter = 0;
-  for (const pack of packs) {
-    switch (pack.type) {
+  for (const block of blocks) {
+    switch (block.type) {
       case "title":
         counter++;
         break;
       case "table":
       case "line": {
-        counter += pack.rows.length;
+        counter += block.type === "table" ? block.cells.length + 1 : 1;
         if (deckRef && noteTypeRef) break;
 
         // iconがある行を調べる
-        const block = convertToBlock(pack);
         const icons = getIcons(block);
         for (const icon of icons) {
           if (icon.toLowerCase().startsWith("deck-")) {
@@ -98,11 +89,10 @@ export const parseNotes = (
         break;
       }
       case "codeBlock": {
-        counter += pack.rows.length;
-        const codeBlock = convertToBlock(pack);
-        if (codeBlock.type !== "codeBlock") throw SyntaxError();
+        const lineCount = block.content.split("\n").length + 1;
+        counter += lineCount;
 
-        const noteTitle = detectNoteTitle(codeBlock.fileName);
+        const noteTitle = detectNoteTitle(block.fileName);
         if (!noteTitle) break;
         const { guid, name, isScrapboxSyntax } = noteTitle;
 
@@ -124,13 +114,13 @@ export const parseNotes = (
 
         // note id は、コードブロックを構成する行の作成日時のうち、一番古いものを採用する
         note.id = Math.min(
-          ...lines.slice(counter, counter + pack.rows.length).map((line) =>
+          ...lines.slice(counter, counter + lineCount).map((line) =>
             line.created * 1000
           ),
           note.id,
         );
         note.updated = Math.max(
-          ...lines.slice(counter, counter + pack.rows.length).map((line) =>
+          ...lines.slice(counter, counter + lineCount).map((line) =>
             line.updated * 1000
           ),
           note.updated,
@@ -141,7 +131,7 @@ export const parseNotes = (
           [
             isSyntax && isScrapboxSyntax,
 
-            content ? `${content}\n${codeBlock.content}` : codeBlock.content,
+            content ? `${content}\n${block.content}` : block.content,
           ],
         );
 

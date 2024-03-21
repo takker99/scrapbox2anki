@@ -1,11 +1,7 @@
 import type { Result } from "./deps/scrapbox.ts";
 import { Page } from "./type.ts";
 import type { Deck } from "./deps/deno-anki.ts";
-import {
-  convertToBlock,
-  packRows,
-  parseToRows,
-} from "./deps/scrapbox-parser.ts";
+import { parse } from "./deps/scrapbox-parser.ts";
 
 /** deckデータの書式が不正だったときに投げるエラー */
 export interface InvalidDeckError {
@@ -42,8 +38,8 @@ export const parseDeck = (
       },
     };
   }
-  const packs = packRows(
-    parseToRows(page.lines.map((line) => line.text).join("\n")),
+  const blocks = parse(
+    page.lines.map((line) => line.text).join("\n"),
     { hasTitle: true },
   );
 
@@ -54,20 +50,18 @@ export const parseDeck = (
   const fileName = "deck.json";
 
   // 設定を読み込む
-  for (const pack of packs) {
-    switch (pack.type) {
+  for (const block of blocks) {
+    switch (block.type) {
       case "title":
       case "line":
         counter++;
         break;
       case "table":
-        counter += pack.rows.length;
+        counter += block.cells.length + 1;
         break;
       case "codeBlock": {
-        counter += pack.rows.length;
+        counter += block.content.split("\n").length;
 
-        const block = convertToBlock(pack);
-        if (block.type !== "codeBlock") throw Error("Must be a codeblock");
         if (!block.fileName.endsWith(fileName)) break;
 
         json += `\n${block.content}`;
