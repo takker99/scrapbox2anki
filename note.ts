@@ -1,11 +1,9 @@
 /// <reference lib="deno.unstable" />
 
 import {
-  Block,
   CodeBlock,
   convertToBlock,
   Line,
-  Node,
   packRows,
   parse,
   parseToRows,
@@ -16,6 +14,7 @@ import { Line as BaseLine } from "./type.ts";
 import { detectNoteTitle } from "./detectNoteTitle.ts";
 import { parsePath, Path } from "./path.ts";
 import { convert } from "./sb2html.ts";
+import { getIcons } from "./getIcons.ts";
 
 /** 抽出したnote
  *
@@ -44,12 +43,21 @@ export interface Note {
   fields: Map<string, string>;
 }
 
+/**
+ * Parses the notes from the given project, title, and lines.
+ *
+ * @param project - The project name.
+ * @param title - The page title.
+ * @param lines - The array of lines to parse.
+ * @returns An array of parsed notes and media URL map.
+ */
 export const parseNotes = (
   project: string,
   title: string,
   lines: BaseLine[],
-): Note[] => {
-  if (lines.length === 0) return [];
+): [Note[], Map<string, URL>] => {
+  const mediaURLs = new Map<string, URL>();
+  if (lines.length === 0) return [[], mediaURLs];
   const packs = packRows(
     parseToRows(lines.map((line) => line.text).join("\n")),
     { hasTitle: true },
@@ -143,64 +151,58 @@ export const parseNotes = (
     }
   }
 
-  return [...notes.values()].map(({ fields: fieldsUnparsed, ...note }) => {
-    // 構文解析しつつ、tagsを取り出す
-    const tags: string[] = [];
-    const dupCheck = new Set<string>();
-    const crawlTag = (tag: string) => {
-      const tagLc = toTitleLc(tag);
-      if (dupCheck.has(tagLc)) return;
-      dupCheck.add(tagLc);
-      tags.push(tag);
-    };
-    const fields = new Map<string, string>();
+  const crawlMedia = (url: URL) => {
+    const filename = url.pathname.split("/").pop()!;
+    mediaURLs.set(filename, url);
+    return filename;
+  };
 
-    // 先にnote取得元project nameとpage titleをtagに入れておく
-    crawlTag(project);
-    crawlTag(title);
+  const parsedNotes: Note[] = [...notes.values()].map(
+    ({ fields: fieldsUnparsed, ...note }) => {
+      // 構文解析しつつ、tagsを取り出す
+      const tags: string[] = [];
+      const dupCheck = new Set<string>();
+      const crawlTag = (tag: string) => {
+        const tagLc = toTitleLc(tag);
+        if (dupCheck.has(tagLc)) return;
+        dupCheck.add(tagLc);
+        tags.push(tag);
+      };
+      const fields = new Map<string, string>();
 
-    for (
-      const [guid, [isScrapboxSyntax, content]] of fieldsUnparsed.entries()
-    ) {
-      if (!isScrapboxSyntax) {
-        fields.set(guid, content);
-        continue;
+      // 先にnote取得元project nameとpage titleをtagに入れておく
+      crawlTag(project);
+      crawlTag(title);
+
+      for (
+        const [guid, [isScrapboxSyntax, content]] of fieldsUnparsed.entries()
+      ) {
+        if (!isScrapboxSyntax) {
+          // contentにあるmedia URLを取得・置換する
+          // gyazo URLへの対応は面倒なのでやっていない
+          const urls = content.match(
+            /https?:\/\/[^\s]+\.(?:png|jpe?g|gif|svg|mp3|ogg|wav|aac|mp4|webm)/g,
+          );
+          let replaced = content;
+          if (urls) {
+            for (const url of urls) {
+              replaced = replaced.replaceAll(url, crawlMedia(new URL(url)));
+            }
+          }
+          fields.set(guid, replaced);
+          continue;
+        }
+        const html = convert(
+          parse(content, { hasTitle: false }) as (Table | CodeBlock | Line)[],
+          project,
+          crawlTag,
+          crawlMedia,
+        );
+        fields.set(guid, html);
       }
-      const html = convert(
-        parse(content, { hasTitle: false }) as (Table | CodeBlock | Line)[],
-        project,
-        crawlTag,
-      );
-      fields.set(guid, html);
-    }
 
-    return ({ ...note, deck: deckRef, noteType: noteTypeRef, fields, tags });
-  });
-};
-
-/** Blockに含まれるiconを出現順にすべて取り出す */
-const getIcons = (block: Block): string[] => {
-  switch (block.type) {
-    case "line":
-      return block.nodes.flatMap((node) => getIconsFromNode(node));
-    case "table":
-      return block.cells.flatMap((row) =>
-        row.flatMap((cell) => cell.flatMap((node) => getIconsFromNode(node)))
-      );
-    default:
-      return [];
-  }
-};
-
-const getIconsFromNode = (node: Node): string[] => {
-  switch (node.type) {
-    case "icon":
-    case "strongIcon":
-      return [node.path];
-    case "decoration":
-    case "quote":
-      return node.nodes.flatMap((node) => getIconsFromNode(node));
-    default:
-      return [];
-  }
+      return ({ ...note, deck: deckRef, noteType: noteTypeRef, fields, tags });
+    },
+  );
+  return [parsedNotes, mediaURLs];
 };
