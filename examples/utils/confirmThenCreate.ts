@@ -18,7 +18,7 @@ export const confirmThenCreate = async (
   pages: Page[],
   init: ConfirmThenCreateInit,
 ): Promise<Blob | undefined> => {
-  const { notes, warnings, errors } = await makeNotes(project, pages);
+  const { notes, medias, warnings, errors } = await makeNotes(project, pages);
   if (warnings.size > 0 || errors.size > 0) {
     const lines = [
       `There are ${warnings.size} warnings and ${errors.size} errors.`,
@@ -48,7 +48,7 @@ export const confirmThenCreate = async (
 
   return makePackage(
     makeCollection(notes, init.sql),
-    {},
+    medias,
     //@ts-ignore 外部moduleが使っているJSZipのversionの食い違いで、どうしても型エラーが生じてしまう
     init.JSZip,
   );

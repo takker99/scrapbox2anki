@@ -87,6 +87,9 @@ export interface MakeNoteResult {
   /** 与えられたページから抽出されたnotes */
   notes: Note[];
 
+  /** ページから抽出されたmedia files */
+  medias: Record<string, Uint8Array>;
+
   /** 各ページ毎に集計した警告 */
   warnings: Map<`/${string}/${string}`, Warning>;
 
@@ -107,16 +110,21 @@ export const makeNotes = async (
   const warnings = new Map<Key, Warning>();
   const errors = new Map<Key, DeckError | NoteTypeError | NetworkError>();
   const notes: Note[] = [];
+  const mediaURLmap = new Map<string, URL>();
 
   for (const page of pages) {
     const key = toKey({ project, title: page.title });
     const warning: Warning = warnings.get(key) ??
       { deckNotSpecified: false, noteTypeNotSpecified: false, skipped: 0 };
-    const parsedNotes = parseNotes(
+    const result = parseNotes(
       project,
       page.title,
       page.lines,
     );
+    const parsedNotes = result[0];
+    for (const [filename, url] of result[1]) {
+      mediaURLmap.set(filename, url);
+    }
 
     for (let i = 0; i < parsedNotes.length; i++) {
       const note = parsedNotes[i];
@@ -176,7 +184,13 @@ export const makeNotes = async (
     }
   }
 
-  return { notes, warnings, errors };
+  const medias: Record<string, Uint8Array> = {};
+  for (const [filename, url] of mediaURLmap) {
+    const res = await fetch(url);
+    medias[filename] = new Uint8Array(await res.arrayBuffer());
+  }
+
+  return { notes, medias, warnings, errors };
 };
 
 type Key = `/${string}/${string}`;

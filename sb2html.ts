@@ -1,5 +1,5 @@
 import { CodeBlock, Line, Node, Table } from "./deps/scrapbox-parser.ts";
-import { encodeTitleURI } from "./deps/scrapbox.ts";
+import { encodeTitleURI, parseAbsoluteLink } from "./deps/scrapbox.ts";
 import { escapeHtml } from "./escapeHTML.ts";
 import { parsePath } from "./path.ts";
 
@@ -21,12 +21,14 @@ export interface ConvertResult {
  *  @param blocks 変換するテキスト。scrapbox-parserで解析済みのobjectを渡す
  *  @param project ページが属するproject
  *  @param crawlTag tagを見つけたときに呼び出されるcallback
+ *  @param crawlMedia media URLを見つけたときに呼び出されるcallback。返り値は置換後のfilename
  *  @return 変換後のHTML
  */
 export const convert = (
   blocks: (Table | CodeBlock | Line)[],
   project: string,
   crawlTag: (tag: string) => void,
+  crawlMedia: (url: URL) => string,
 ): string => {
   // このindent levelを基準にする
   const topIndentLevel = Math.min(...blocks.map((block) => block.indent));
@@ -62,18 +64,17 @@ export const convert = (
       case "table":
         result.push(
           newLevel === 0
-            ? convertTable(block, project, crawlTag)
+            ? convertTable(block, project, crawlTag, crawlMedia)
             : `${indent}<li>\n${
-              convertTable(block, project, crawlTag).split("\n").map((line) =>
-                `${indent}${iUnit}${line}`
-              ).join("\n")
+              convertTable(block, project, crawlTag, crawlMedia).split("\n")
+                .map((line) => `${indent}${iUnit}${line}`).join("\n")
             }\n${indent}</li>`,
         );
         break;
       case "line":
         {
           const content = block.nodes.map((node) =>
-            convertNode(node, project, crawlTag)
+            convertNode(node, project, crawlTag, crawlMedia)
           )
             .join("");
           result.push(
@@ -105,12 +106,14 @@ const convertTable = (
   table: Table,
   project: string,
   crawlTag: (tag: string) => void,
+  crawlMedia: (url: URL) => string,
 ): string => {
   const [head, ...lines] = table.cells.map(
     (cell) =>
       cell.map(
         (row) =>
-          row.map((node) => convertNode(node, project, crawlTag)).join(""),
+          row.map((node) => convertNode(node, project, crawlTag, crawlMedia))
+            .join(""),
       ),
   );
   return `<table class="table">
@@ -137,11 +140,14 @@ const convertNode = (
   node: Node,
   project: string,
   crawlTag: (tag: string) => void,
+  crawlMedia: (url: URL) => string,
 ): string => {
   switch (node.type) {
     case "quote":
       return `<span class="quote">${
-        node.nodes.map((node) => convertNode(node, project, crawlTag)).join("")
+        node.nodes.map((node) =>
+          convertNode(node, project, crawlTag, crawlMedia)
+        ).join("")
       }</span>`;
     case "image":
     case "strongImage": {
@@ -165,7 +171,7 @@ const convertNode = (
       return `\\( ${escapeHtml(node.formula)} \\)`;
     case "decoration": {
       const result = node.nodes.map((node) =>
-        convertNode(node, project, crawlTag)
+        convertNode(node, project, crawlTag, crawlMedia)
       ).join(
         "",
       );
@@ -176,7 +182,9 @@ const convertNode = (
     }
     case "strong":
       return `<strong>${
-        node.nodes.map((node) => convertNode(node, project, crawlTag)).join("")
+        node.nodes.map((node) =>
+          convertNode(node, project, crawlTag, crawlMedia)
+        ).join("")
       }</strong>`;
     case "code":
       return `<code class="code">${escapeHtml(node.text)}</code>`;
@@ -199,10 +207,28 @@ const convertNode = (
             escapeHtml(href)
           }">${escapeHtml(node.href)}</a>`;
         }
-        default:
-          return `<a class="link" target="_blank" href="${
-            escapeHtml(node.href)
-          }">${escapeHtml(node.content || node.href)}</a>`;
+        case "absolute": {
+          // @ts-ignore node.pathType === "absolute"なはず
+          const linkNode = parseAbsoluteLink(node);
+          switch (linkNode.type) {
+            case "absoluteLink":
+            case "youtube":
+            case "vimeo":
+            case "spotify":
+            case "anchor-fm":
+              return `<a class="link" target="_blank" href="${
+                escapeHtml(node.href)
+              }">${escapeHtml(node.content || node.href)}</a>`;
+            case "video":
+            case "audio": {
+              const filename = crawlMedia(new URL(node.href));
+              const tag = linkNode.type;
+              return `<${tag} class="${tag}" src="${
+                escapeHtml(filename)
+              }" controls></${tag}>`;
+            }
+          }
+        }
       }
     }
     case "hashTag":
@@ -210,7 +236,9 @@ const convertNode = (
       return "";
     case "numberList":
       return `${node.number}. ${
-        node.nodes.map((node) => convertNode(node, project, crawlTag)).join("")
+        node.nodes.map((node) =>
+          convertNode(node, project, crawlTag, crawlMedia)
+        ).join("")
       }`;
     case "blank":
       return node.text;
