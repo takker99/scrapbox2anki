@@ -1,7 +1,7 @@
 import type { Result } from "./deps/scrapbox.ts";
 import { Page } from "./type.ts";
 import type { Field, NoteType, Template } from "./deps/deno-anki.ts";
-import {parse } from "./deps/scrapbox-parser.ts";
+import { parse } from "./deps/scrapbox-parser.ts";
 
 /** note typeデータの書式が不正だったときに投げるエラー */
 export interface InvalidNoteTypeError {
